@@ -1,0 +1,11 @@
+.element__rectangle {
+    background-color: #fff;
+    width: 100%;
+    height: calc(100% - 282px);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 20px;
+}
