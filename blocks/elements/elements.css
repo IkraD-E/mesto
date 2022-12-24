@@ -6,6 +6,19 @@
     max-width: 880px;
     width: 100%;
     grid-template-columns: repeat(3, 1fr);
-    grid-auto-columns: repeat(3, 1fr);
+    grid-auto-columns: 1fr;
     justify-items: center;
+}
+
+@media screen and (max-width: 1023px) {
+    .elements {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .elements {
+        grid-template-columns: 1fr;
+        margin-top: 36px;
+    }
 }

@@ -1,0 +1,13 @@
+.popup__submit-btn {
+    max-width: 358px;
+    width: 100%;
+    min-height: 50px;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+    text-align: center;
+    color: #FFF;
+    background-color: #000;
+    margin-top: 48px;
+    cursor: pointer;
+}

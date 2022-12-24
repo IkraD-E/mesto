@@ -6,3 +6,18 @@
     align-items: flex-start;
     justify-content: space-between;
 }
+
+@media screen and (max-width: 767px) {
+    .profile {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width: 525px) {
+    .profile {
+        margin: 42px auto 0;
+        flex-direction: column;
+        align-items: center;
+    }
+}
