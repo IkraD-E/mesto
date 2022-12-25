@@ -2,9 +2,15 @@
     background-image: url(../../../images/element__like-btn.svg);
     width: 22px;
     height: 19px;
-    transition: opacity .8s ease-in-out;
+    transition: opacity .3s ease-in-out;
+    cursor: pointer;
 }
 
 .element__like-btn:hover {
-    opacity: .6;
+    opacity: .5;
+}
+
+.element__like-btn:active {
+    opacity: 1;
+    background-image: url(../../../../images/element__like-btn_active.svg);
 }

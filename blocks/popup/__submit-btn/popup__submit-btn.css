@@ -10,4 +10,13 @@
     background-color: #000;
     margin-top: 48px;
     cursor: pointer;
+    padding: 0;
+    border: none;
+}
+
+@media screen and (max-width: 767px) {
+    .popup__submit-btn {
+        margin-top: 45px;
+        min-height: 46px;
+    }
 }

@@ -14,3 +14,9 @@
 .popup__text:last-of-type {
     margin-top: 30px;
 }
+
+@media screen and (max-width: 767px) {
+    .popup__text {
+        margin-top: 75px;
+    }
+}
