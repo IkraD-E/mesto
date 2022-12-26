@@ -4,13 +4,16 @@
     height: 19px;
     transition: opacity .3s ease-in-out;
     cursor: pointer;
+    border: none;
+    padding: 0;
+    background-color: #fff;
 }
 
 .element__like-btn:hover {
     opacity: .5;
 }
 
-.element__like-btn:active {
+.element__like-btn:active, .element__like-btn:focus {
+    background-image: url(../../../images/element__like-btn_active.svg);
     opacity: 1;
-    background-image: url(../../../../images/element__like-btn_active.svg);
 }
