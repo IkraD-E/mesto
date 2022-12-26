@@ -7,11 +7,16 @@
     line-height: 22px;
     text-align: center;
     color: #FFF;
-    background-color: #000;
+    background-color: rgba(0, 0, 0, 1);
     margin-top: 48px;
     cursor: pointer;
     padding: 0;
     border: none;
+    transition: background-color .8s ease-in-out;
+}
+
+.popup__submit-btn:hover {
+    background-color: rgba(0, 0, 0, .8);
 }
 
 @media screen and (max-width: 767px) {
