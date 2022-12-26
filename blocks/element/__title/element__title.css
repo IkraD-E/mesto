@@ -10,9 +10,9 @@
     overflow: hidden;
 }
 
-@media screen and (max-width: 1023px) {
+@media screen and (max-width: 860px) {
     .element__title {
-        max-width: 70%;
+        max-width: 80%;
     }
 }
 
