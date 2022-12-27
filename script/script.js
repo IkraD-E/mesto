@@ -8,9 +8,9 @@ let nameProfile = document.querySelector(".profile__header");
 
 let jobProfile = document.querySelector(".profile__text");
 
-let nameInput = document.querySelector(".popup__text_name");
+let nameInput = document.querySelector(".popup__text_type_initial");
 
-let jobInput = document.querySelector(".popup__text_description");
+let jobInput = document.querySelector(".popup__text_type_description");
 
 let formElement = document.querySelector(".popup__submit-btn");
 
@@ -32,5 +32,5 @@ formElement.addEventListener("click", function (e) {
     e.preventDefault();
     nameProfile.innerHTML = nameInput.value;
     jobProfile.innerHTML = jobInput.value;
-    popup.classList.remove("popup_opened");
+    closePopup();
 });
