@@ -1,4 +1,5 @@
 .element {
+    position: relative;
     border-radius: 10px;
     max-width: 282px;
     width: 100%;

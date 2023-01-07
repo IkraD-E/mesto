@@ -5,7 +5,7 @@
     object-fit: contain;
 }
 
-@media screen and (max-width: 890px) {
+@media screen and (max-width: 970px) {
     .header__logo {
         width: 104px;
         height: 25px;
