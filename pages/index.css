@@ -34,6 +34,12 @@
 
 @import url(../blocks/popup/__form/popup__form.css);
 
+@import url(../blocks/popup/__figure/popup__figure.css);
+
+@import url(../blocks/popup/__image-header/popup__image-header.css);
+
+@import url(../blocks/popup/__image/popup__image.css);
+
 /* Profile */
 
 @import url(../blocks/profile/profile.css);

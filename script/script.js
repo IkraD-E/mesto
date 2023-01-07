@@ -20,6 +20,8 @@ let nameProfile = document.querySelector(".profile__header");
 
 let jobProfile = document.querySelector(".profile__text");
 
+let popupImage = document.querySelector("#popup__image");
+
 
 //Создаём массив карт для подгрузки
 
@@ -71,6 +73,20 @@ function addPlace(placeName, placeImage, position = "start") {
         evt.target.classList.toggle("element__like-btn_active");
     })
     placeElementDelBtn.addEventListener("click", evt => deletePlace(evt));
+
+    placeElementPhoto.addEventListener("click", evt => {
+        openPopup(popupImage);
+        const popupCloseBtn = popupImage.querySelector(".popup__close-btn");
+        const elementPhoto = popupImage.querySelector(".popup__image");
+        const elementPhotoHeader = popupImage.querySelector(".popup__image-header");
+
+        elementPhoto.src = placeElementPhoto.src;
+        elementPhoto.alt = placeName;
+        elementPhotoHeader.textContent = placeName;
+
+        popupCloseBtn.addEventListener("click",  () => 
+        closePopup(popupCloseBtn));
+    });
 
     if (position === "start") {
         elementList.insertBefore(placeElement, elementList.children[0]);
