@@ -30,27 +30,27 @@ let elementList = document.querySelector(".elements__list");
 const initialCards = [
     {
       name: 'Архыз',
-      link: './images/Karachaevsck.jpg'
+      link: './images/arhiz.jpg'
     },
     {
       name: 'Челябинская область',
-      link: './images/Elbrus.jpg'
+      link: './images/Chelaninsk.jpg'
     },
     {
       name: 'Иваново',
-      link: './images/Dombai.jpg'
+      link: './images/ivanovo.jpg'
     },
     {
       name: 'Камчатка',
-      link: './images/Elbrus.jpg'
+      link: './images/Kamchatka.jpg'
     },
     {
       name: 'Холмогорский район',
-      link: './images/Dombai.jpg'
+      link: './images/Kholmogorsky district.jpg'
     },
     {
       name: 'Байкал',
-      link: './images/Karachaevsck.jpg'
+      link: './images/Baikal.jpg'
     }
 ];
 
