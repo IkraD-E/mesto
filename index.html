@@ -25,14 +25,14 @@
                 <button class="profile__add-button" type="button"></button>
             </section>
 
-            <section class="elements">
+            <section class="elements" aria-label="places">
                 <ul class="elements__list">
                 </ul>
             </section>
             
             <div class="popup" id="popup__change-profile">
                 <div class="popup__container">
-                    <button class="popup__close-btn" id="edit__close-btn" type="button"></button>
+                    <button class="popup__close-btn" type="button"></button>
                     <h2 class="popup__header">Редактировать профиль</h2>
                     <form class="popup__form" name="popup__form">
                         <input type="text" name="initial" placeholder="ФИО" class="popup__text popup__text_type_initial">
@@ -46,7 +46,7 @@
 
             <div class="popup" id="popup__add-place">
                 <div class="popup__container">
-                    <button class="popup__close-btn" id="add__close-btn" type="button"></button>
+                    <button class="popup__close-btn" type="button"></button>
                     <h2 class="popup__header">Новое место</h2>
                     <form class="popup__form" name="popup__form">
                         <input type="text" name="name" placeholder="Название" class="popup__text popup__text_type_place-name">
@@ -60,8 +60,8 @@
 
             <div class="popup" id="popup__image">
                 <figure class="popup__figure">
-                    <button class="popup__close-btn" id="add__close-btn" type="button"></button>
-                    <img class="popup__image" src="" alt="">
+                    <button class="popup__close-btn" type="button"></button>
+                    <img class="popup__image" src="#" alt="Пока здесь пусто">
                     <figcaption class="popup__image-header"></figcaption>
                 </figure>
             </div>

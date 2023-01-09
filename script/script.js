@@ -1,5 +1,3 @@
-let popup = document.querySelector(".popup");
-
 let popupAddPlace = document.querySelector("#popup__add-place");
 
 let profileChange = document.querySelector("#popup__change-profile");
@@ -62,7 +60,7 @@ function deletePlace(place) {
 function addPlace(placeName, placeImage, position = "start") {
     const placeTemplate = document.querySelector("#element-template").content;
     const placeElement = placeTemplate.querySelector(".element").cloneNode(true);
-    const likeBtn = placeElement.querySelector(".element__like-btn")
+    const likeBtn = placeElement.querySelector(".element__like-btn");
     const placeElementPhoto = placeElement.querySelector(".element__photo");
     const placeElementDelBtn = placeElement.querySelector(".element_delete_button");
 
@@ -71,10 +69,11 @@ function addPlace(placeName, placeImage, position = "start") {
     placeElementPhoto.alt = placeName;
     likeBtn.addEventListener("click", evt => {
         evt.target.classList.toggle("element__like-btn_active");
-    })
+    });
+
     placeElementDelBtn.addEventListener("click", evt => deletePlace(evt));
 
-    placeElementPhoto.addEventListener("click", evt => {
+    placeElementPhoto.addEventListener("click", () => {
         openPopup(popupImage);
         const popupCloseBtn = popupImage.querySelector(".popup__close-btn");
         const elementPhoto = popupImage.querySelector(".popup__image");
@@ -94,12 +93,10 @@ function addPlace(placeName, placeImage, position = "start") {
         elementList.append(placeElement);
     }
 
-};
+}
 
 //Добовляем карты на страницу
-initialCards.forEach(item => {
-    addPlace(item["name"], item["link"], "start");
-});
+initialCards.forEach(item => addPlace(item["name"], item["link"], "start"));
 
 //Работа попапов
 
@@ -118,7 +115,7 @@ function closePopup(name) {
 
 function submitProfileChanges(evt) {
     evt.preventDefault();
-    console.log(evt.target.closest(".popup").id)
+    console.log(evt.target.closest(".popup").id);
     nameProfile.innerHTML = nameInput.value;
     jobProfile.innerHTML = jobInput.value;
     closePopup(evt.target);
@@ -141,9 +138,8 @@ profileAdd.addEventListener("click",  () => {
         evt.preventDefault();
         const place = placeNameInput.value;
         const image = imageSourceInput.value;
-        addPlace(place, image)
+        addPlace(place, image);
         closePopup(evt.target);
     });
     popupCloseBtn.addEventListener("click",  () => closePopup(popupAddPlace));
 });
-
