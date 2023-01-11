@@ -35,8 +35,8 @@
                     <button class="popup__close-btn" type="button"></button>
                     <h2 class="popup__header">Редактировать профиль</h2>
                     <form class="popup__form" name="popup__form">
-                        <input type="text" name="initial" placeholder="ФИО" class="popup__text popup__text_type_initial">
-                        <input type="text" name="description" placeholder="Профессия" class="popup__text popup__text_type_description">
+                        <input required type="text" name="initial" placeholder="ФИО" class="popup__text popup__text_type_initial">
+                        <input required type="text" name="description" placeholder="Профессия" class="popup__text popup__text_type_description">
                         <button class="popup__submit-btn" type="submit">
                             Сохранить
                         </button>
@@ -49,8 +49,8 @@
                     <button class="popup__close-btn" type="button"></button>
                     <h2 class="popup__header">Новое место</h2>
                     <form class="popup__form" name="popup__form">
-                        <input type="text" name="name" placeholder="Название" class="popup__text popup__text_type_place-name">
-                        <input type="text" name="source" placeholder="Ссылка на картинку" class="popup__text popup__text_type_image-source">
+                        <input required type="text" name="name" placeholder="Название" class="popup__text popup__text_type_place-name">
+                        <input required type="text" name="source" placeholder="Ссылка на картинку" class="popup__text popup__text_type_image-source">
                         <button class="popup__submit-btn" type="submit">
                             Создать
                         </button>
@@ -58,7 +58,7 @@
                 </div>
             </div>
 
-            <div class="popup" id="popup__image">
+            <div class="popup popup__type_image-view" id="popup__image">
                 <figure class="popup__figure">
                     <button class="popup__close-btn" type="button"></button>
                     <img class="popup__image" src="#" alt="Пока здесь пусто">
@@ -82,7 +82,8 @@
         <footer class="footer">
             <p class="footer__copyright">© 2023 Mesto Russia IkraD</p>
         </footer>
-        <script src="./script/script.js"></script>
+        <script src="./script/cards.js"></script>
+        <script src="./script/index.js"></script>
     </div>
 </body>
 </html>
