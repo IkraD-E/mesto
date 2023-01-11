@@ -33,9 +33,7 @@ const popupAddPlaceForm = popupAddPlace.querySelector(".popup__form");
 
 const popupImageCloseBtn = popupImage.querySelector(".popup__close-btn");
 
-console.log(popupImage);
-
-popupImageCloseBtn.addEventListener("click",  () => closePopup(popupImageCloseBtn));
+popupImageCloseBtn.addEventListener("click",  () => closePopup(popupImage));
 
 // ProfileChange
 
@@ -45,7 +43,7 @@ function submitProfileChanges(event) {
     event.preventDefault();
     nameProfile.textContent = nameInput.value;
     jobProfile.textContent = jobInput.value;
-    closePopup(event.target);
+    closePopup(profileChange);
 }
 
 popupEditForm.addEventListener("submit",  submitProfileChanges);
@@ -56,23 +54,33 @@ popupEditCloseBtn.addEventListener("click",  () => closePopup(profileChange));
 
 const popupAddPlaceCloseBtn = popupAddPlace.querySelector(".popup__close-btn");
 
+popupAddPlaceCloseBtn.addEventListener("click",  () => closePopup(popupAddPlace));
+
 popupAddPlaceForm.addEventListener("submit",  event => {
     event.preventDefault();
     const place = placeNameInput.value;
     const image = imageSourceInput.value;
-    addPlace(place, image);
-    closePopup(event.target);
+    renderCard(addPlace(place, image));
+    closePopup(popupAddPlace);
     event.target.reset(); 
 });
-
-popupAddPlaceCloseBtn.addEventListener("click",  () => closePopup(popupAddPlace));
-
 
 function deletePlace(event) {
     event.target.closest(".element").remove();
 }
 
-function addPlace(placeName, placeImage, position = "start") {
+
+//Добовляем карты на страницу
+
+function renderCard(cardElement, position = "start") {
+    if (position === "start") {
+        elementList.prepend(cardElement);
+    } else {
+        elementList.append(cardElement);
+    }
+}
+
+function addPlace(placeName, placeImage) {
     const placeElement = placeTemplate.querySelector(".element").cloneNode(true);
     const likeBtn = placeElement.querySelector(".element__like-btn");
     const placeElementPhoto = placeElement.querySelector(".element__photo");
@@ -97,18 +105,10 @@ function addPlace(placeName, placeImage, position = "start") {
 
         openPopup(popupImage);
     });
-
-    if (position === "start") {
-        elementList.prepend(placeElement);
-    } else {
-        elementList.append(placeElement);
-    }
-
+    return(placeElement);
 }
 
-//Добовляем карты на страницу
-
-initialCards.forEach(item => addPlace(item["name"], item["link"], "start"));
+initialCards.forEach(item => renderCard(addPlace(item["name"], item["link"]), null));
 
 function openPopup(popup) {
     popup.classList.add("popup_opened");
@@ -121,8 +121,8 @@ function getProfileInfo() {
     jobInput.value = jobProfile.textContent;
 }
 
-function closePopup(popup) {
-    popup.closest(".popup").classList.remove("popup_opened");
+function closePopup(popupId) {
+    popupId.classList.remove("popup_opened");
 }
 
 profileEditButton.addEventListener("click",  () => {
