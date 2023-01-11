@@ -40,7 +40,7 @@
 
 @import url(../blocks/popup/__image/popup__image.css);
 
-@import url(../blocks/popup/__type/popup__type_image-view.css);
+@import url(../blocks/popup/_type/popup_type_image.css);
 
 /* Profile */
 
