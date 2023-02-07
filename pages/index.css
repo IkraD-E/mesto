@@ -42,6 +42,10 @@
 
 @import url(../blocks/popup/_type/popup_type_image.css);
 
+@import url(../blocks/popup/__submit-btn/_inactive/popup__submit-btn_inactive.css);
+
+@import url(../blocks/popup/__input-error/popup__input-error.css);
+
 /* Profile */
 
 @import url(../blocks/profile/profile.css);
