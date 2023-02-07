@@ -1,4 +1,4 @@
 .popup__submit-btn_inactive {
     opacity: .2;
-    user-select: none;
+    pointer-events: none;
 }

@@ -39,7 +39,7 @@ const elementPhoto = popupImage.querySelector(".popup__image");
 
 const elementPhotoHeader = popupImage.querySelector(".popup__image-header");
 
-
+const popupList = Array.from(document.querySelectorAll(".popup"));
 
 function handleSubmitProfileChanges(event) {
     event.preventDefault();
@@ -115,6 +115,11 @@ popupEditCloseBtn.addEventListener("click",  () => closePopup(profileChange));
 
 popupAddPlaceCloseBtn.addEventListener("click",  () => closePopup(popupAddPlace));
 
+popupList.forEach((popup) => {
+    console.log('Я работаю!', popup);
+    popup.addEventListener("click",  (evt) => closePopup(evt.target))
+})
+
 popupAddPlaceForm.addEventListener("submit",  event => {
     event.preventDefault();
     const place = placeNameInput.value;
@@ -157,12 +162,11 @@ function checkInputValidity(formElement, inputElement){
 function setEventListeners(formElement){
     const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
     const buttonElement = formElement.querySelector('.popup__submit-btn');
-    
+
     toggleButtonState(inputList, buttonElement);
     
     inputList.forEach((inputElement) => {
         inputElement.addEventListener('input', () => {
-            console.log(formElement, inputElement, inputElement.id, formElement.querySelector(`.${inputElement.id}-error`));
             checkInputValidity(formElement, inputElement);
             toggleButtonState(inputList, buttonElement);
         });
