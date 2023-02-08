@@ -35,11 +35,11 @@
                     <button class="popup__close-btn" type="button"></button>
                     <h2 class="popup__header">Редактировать профиль</h2>
                     <form class="popup__form" name="popup__form" novalidate>
-                        <input required minlength="2" maxlength="40" type="text" name="initial" id="initial-input" placeholder="ФИО" class="popup__input popup__input_type_initial popup__input">
-                        <span class="popup__input-error initial-input-error"></span>
-                        <input required minlength="2" maxlength="200" type="text" name="description" id="description-input" placeholder="Профессия" class="popup__input popup__input_type_description popup__input">
-                        <span class="popup__input-error description-input-error"></span>
-                        <button class="popup__submit-btn" type="submit">
+                        <input required minlength="2" maxlength="40" type="text" name="initial" id="initial" placeholder="ФИО" class="popup__input popup__input_type_initial popup__input">
+                        <span class="popup__error initial-error"></span>
+                        <input required minlength="2" maxlength="200" type="text" name="description" id="description" placeholder="Профессия" class="popup__input popup__input_type_description popup__input">
+                        <span class="popup__error description-error"></span>
+                        <button class="popup__button" type="submit">
                             Сохранить
                         </button>
                     </form>
@@ -51,11 +51,11 @@
                     <button class="popup__close-btn" type="button"></button>
                     <h2 class="popup__header">Новое место</h2>
                     <form class="popup__form" name="popup__form" novalidate>
-                        <input required minlength="2" maxlength="30" type="text" name="place-name" id="place-name-input" placeholder="Название" class="popup__input popup__input_type_place-name popup__input">
-                        <span class="popup__input-error place-name-input-error"></span>
-                        <input required type="url" name="place-source-input" id="place-source-input" placeholder="Ссылка на картинку" class="popup__input popup__input_type_image-source popup__input">
-                        <span class="popup__input-error place-source-input-error"></span>
-                        <button class="popup__submit-btn" type="submit">
+                        <input required minlength="2" maxlength="30" type="text" name="place-name" id="place-name" placeholder="Название" class="popup__input popup__input_type_place-name popup__input">
+                        <span class="popup__error place-name-error"></span>
+                        <input required type="url" name="place-source-" id="place-source" placeholder="Ссылка на картинку" class="popup__input popup__input_type_image-source popup__input">
+                        <span class="popup__error place-source-error"></span>
+                        <button class="popup__button" type="submit">
                             Создать
                         </button>
                     </form>
@@ -86,6 +86,7 @@
         <footer class="footer">
             <p class="footer__copyright">© 2023 Mesto Russia IkraD</p>
         </footer>
+        <script src="./script/validate.js"></script>
         <script src="./script/cards.js"></script>
         <script src="./script/index.js"></script>
     </div>
