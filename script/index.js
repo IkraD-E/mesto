@@ -85,8 +85,13 @@ function handleDeletePlace(event) {
 }
 
 function openPopup(popup) {
+    const popupSubmitBtn = popup.querySelector('.popup__submit-btn');
     popup.classList.add("popup_opened");
     document.addEventListener("keydown", closePopupKeyboard);
+    if (popupSubmitBtn) {
+        popupSubmitBtn.classList.add("popup__submit-btn_inactive");
+    }
+
 }
 
 function getProfileInfo() {
