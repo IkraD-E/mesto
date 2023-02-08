@@ -40,6 +40,20 @@ const elementPhotoHeader = popupImage.querySelector(".popup__image-header");
 
 const popupList = Array.from(document.querySelectorAll(".popup"));
 
+const elementsContainer = document.querySelector(".elements");
+
+elementsContainer.addEventListener('click', function (evt) {
+    if (evt.target.classList.contains("element__like-btn")) {
+        evt.target.classList.toggle("element__like-btn_active");
+    }
+});
+
+elementsContainer.addEventListener('click', function (evt) {
+    if (evt.target.classList.contains("element_delete_button")) {
+        handleDeletePlace(evt)
+    }
+});
+
 function handleSubmitProfileChanges(event) {
     event.preventDefault();
     nameProfile.textContent = nameInput.value;
@@ -64,11 +78,6 @@ function createPlace(placeName, placeImage) {
     placeElement.querySelector(".element__title").textContent = placeName;
     placeElementPhoto.src = placeImage;
     placeElementPhoto.alt = placeName;
-    likeBtn.addEventListener("click", evt => {
-        evt.target.classList.toggle("element__like-btn_active");
-    });
-
-    placeElementDelBtn.addEventListener("click", handleDeletePlace);
 
     placeElementPhoto.addEventListener("click", () => {
         elementPhoto.src = placeElementPhoto.src;
