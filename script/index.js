@@ -1,17 +1,16 @@
-
 const popupAddPlace = document.querySelector("#popup__add-place");
 
 const profileChange = document.querySelector("#popup__change-profile");
 
 const popupEditForm = profileChange.querySelector(".popup__form");
 
-const nameInput = profileChange.querySelector(".popup__text_type_initial");
+const nameInput = profileChange.querySelector(".popup__input_type_initial");
 
-const jobInput = profileChange.querySelector(".popup__text_type_description");
+const jobInput = profileChange.querySelector(".popup__input_type_description");
 
-const placeNameInput = popupAddPlace.querySelector(".popup__text_type_place-name");
+const placeNameInput = popupAddPlace.querySelector(".popup__input_type_place-name");
 
-const imageSourceInput = popupAddPlace.querySelector(".popup__text_type_image-source");
+const imageSourceInput = popupAddPlace.querySelector(".popup__input_type_image-source");
 
 const profileAdd = document.querySelector(".profile__add-button");
 
@@ -87,6 +86,7 @@ function handleDeletePlace(event) {
 
 function openPopup(popup) {
     popup.classList.add("popup_opened");
+    document.addEventListener("keydown", closePopupKeyboard);
 }
 
 function getProfileInfo() {
@@ -94,8 +94,22 @@ function getProfileInfo() {
     jobInput.value = jobProfile.textContent;
 }
 
+function closePopupKeyboard(evt) {
+    const openedPopup = document.querySelector(".popup_opened");
+    if (evt.key === 'Escape' && openedPopup) {
+        closePopup(openedPopup)
+    }
+};
+
+function disableEnterBtn(evt) {
+    if (evt.key === "Enter") {
+        evt.preventDefault();
+    }
+}
+
 function closePopup(popupId) {
     popupId.classList.remove("popup_opened");
+    document.removeEventListener("keydown", closePopupKeyboard);
 }
 
 profileEditButton.addEventListener("click",  () => {
@@ -116,8 +130,7 @@ popupEditCloseBtn.addEventListener("click",  () => closePopup(profileChange));
 popupAddPlaceCloseBtn.addEventListener("click",  () => closePopup(popupAddPlace));
 
 popupList.forEach((popup) => {
-    console.log('Я работаю!', popup);
-    popup.addEventListener("click",  (evt) => closePopup(evt.target))
+    popup.addEventListener("mousedown",  (evt) => closePopup(evt.target))
 })
 
 popupAddPlaceForm.addEventListener("submit",  event => {
@@ -151,10 +164,8 @@ function hideInputError(formElement, inputElement){
 
 function checkInputValidity(formElement, inputElement){
     if (!inputElement.validity.valid) {
-        console.log('Это ошибка -', inputElement.validationMessage);
         showInputError(formElement, inputElement, inputElement.validationMessage);
     } else {
-        console.log('Это здоровая строка -', inputElement);
         hideInputError(formElement, inputElement);
     }
 };
@@ -170,6 +181,9 @@ function setEventListeners(formElement){
             checkInputValidity(formElement, inputElement);
             toggleButtonState(inputList, buttonElement);
         });
+
+        inputElement.addEventListener('keydown', disableEnterBtn);
+        inputElement.addEventListener("keydown", closePopupKeyboard);
     });
 };
 
