@@ -40,6 +40,15 @@ const elementPhotoHeader = popupImage.querySelector(".popup__image-header");
 
 const popupList = Array.from(document.querySelectorAll(".popup"));
 
+const validationList = {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inactiveButtonClass: 'popup__button_disabled',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__error_visible'
+}
+
 elementsList.addEventListener('click', function (evt) {
     if (evt.target.classList.contains("element__like-btn")) {
         evt.target.classList.toggle("element__like-btn_active");
@@ -63,12 +72,11 @@ elementsList.addEventListener('click', function (evt) {
 });
 
 popupList.forEach((popup) => {
-    popup.addEventListener('click', function (evt) {
+    popup.addEventListener('mousedown', function (evt) {
         const target = evt.target;
         const targetClassList = target.classList;
 
         if (targetClassList.contains("popup__close-btn") || targetClassList.contains("popup")) {
-            console.log(target);
             closePopup(popup);
         }
     });
@@ -105,12 +113,16 @@ function handleDeletePlace(event) {
 }
 
 function openPopup(popup) {
-    const popupSubmitBtn = popup.querySelector('.popup__button');
+    const buttonElement = popup.querySelector('.popup__button');
+
     popup.classList.add("popup_opened");
     document.addEventListener("keydown", closePopupKeyboard);
-    if (popupSubmitBtn) {
-        popupSubmitBtn.classList.add("popup__button_disabled");
+    if (buttonElement) {
+        const inputList = Array.from(popup.querySelectorAll(`${validationList.inputSelector}`));
+
+        toggleButtonState(inputList, buttonElement, validationList);
     }
+
 }
 
 function getProfileInfo() {
@@ -119,13 +131,23 @@ function getProfileInfo() {
 }
 
 function closePopup(popup) {
+    const inputList = Array.from(popup.querySelectorAll(".popup__input"));
+    const popupForm = popup.querySelector('.popup__form');
+    const formElement = popup.querySelector(".popup__form");
+
     popup.classList.remove("popup_opened");
     document.removeEventListener("keydown", closePopupKeyboard);
+
+    inputList.forEach((inputElement) => {
+        hideInputError(formElement, inputElement, validationList);
+    })
+
+    popupForm.reset();    
 }
 
 profileEditButton.addEventListener("click",  () => {
-    openPopup(profileChange);
     getProfileInfo();
+    openPopup(profileChange);
 });
 
 profileAdd.addEventListener("click",  () => {
@@ -148,11 +170,4 @@ initialCards.forEach(item => renderCard(createPlace(item["name"], item["link"]))
 
 // Код валидации
 
-enableValidation({
-    formSelector: '.popup__form',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__button',
-    inactiveButtonClass: 'popup__button_disabled',
-    inputErrorClass: 'popup__input_type_error',
-    errorClass: 'popup__error_visible'
-});
+enableValidation(validationList);
