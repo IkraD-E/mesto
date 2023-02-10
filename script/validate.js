@@ -1,6 +1,3 @@
-// включение валидации вызовом enableValidation
-// все настройки передаются при вызове
-
 function disableEnterBtn(evt) {
     if (evt.key === "Enter") {
         evt.preventDefault();
@@ -10,23 +7,23 @@ function disableEnterBtn(evt) {
 function closePopupKeyboard(evt) {
     const openedPopup = document.querySelector(".popup_opened");
     if (evt.key === 'Escape' && openedPopup) {
-        closePopup(openedPopup)
+        closePopup(openedPopup);
     }
-};
+}
 
 function showInputError(formElement, inputElement, validationList, errorMessage){
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
     inputElement.classList.add(`${validationList.inputErrorClass}`);
     errorElement.textContent = errorMessage;
     errorElement.classList.add('popup__error_active');
-};
+}
 
 function hideInputError(formElement, inputElement, validationList){
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
     inputElement.classList.remove(`${validationList.inputErrorClass}`);
     errorElement.classList.remove('popup__error_active');
     errorElement.textContent = '';
-};
+}
 
 function checkInputValidity(formElement, inputElement, validationList){
     if (!inputElement.validity.valid) {
@@ -34,7 +31,7 @@ function checkInputValidity(formElement, inputElement, validationList){
     } else {
         hideInputError(formElement, inputElement, validationList);
     }
-};
+}
 
 function setEventListeners(formElement, validationList){
     const inputList = Array.from(formElement.querySelectorAll(`${validationList.inputSelector}`));
@@ -51,7 +48,7 @@ function setEventListeners(formElement, validationList){
         inputElement.addEventListener('keydown', disableEnterBtn);
         inputElement.addEventListener("keydown", closePopupKeyboard);
     });
-};
+}
 
 function enableValidation(validationList){
     const formList = Array.from(document.querySelectorAll(`${validationList.formSelector}`));
@@ -62,13 +59,13 @@ function enableValidation(validationList){
         });
         setEventListeners(formElement, validationList);
     });
-};
+}
 
 function hasInvalidInput(inputList) {
     return inputList.some((inputElement) => {
         return !inputElement.validity.valid;
-    })
-};
+    });
+}
   
 function toggleButtonState(inputList, buttonElement, validationList) {
     if (hasInvalidInput(inputList)) {
@@ -76,4 +73,4 @@ function toggleButtonState(inputList, buttonElement, validationList) {
     } else {
         buttonElement.classList.remove(`${validationList.inactiveButtonClass}`);
     }
-};
+}

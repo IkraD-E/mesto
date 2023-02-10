@@ -57,7 +57,7 @@ elementsList.addEventListener('click', function (evt) {
 
 elementsList.addEventListener('click', function (evt) {
     if (evt.target.classList.contains("element_delete_button")) {
-        handleDeletePlace(evt)
+        handleDeletePlace(evt);
     }
 });
 
@@ -70,17 +70,6 @@ elementsList.addEventListener('click', function (evt) {
         openPopup(popupImage);
     }
 });
-
-popupList.forEach((popup) => {
-    popup.addEventListener('mousedown', function (evt) {
-        const target = evt.target;
-        const targetClassList = target.classList;
-
-        if (targetClassList.contains("popup__close-btn") || targetClassList.contains("popup")) {
-            closePopup(popup);
-        }
-    });
-})
 
 function handleSubmitProfileChanges(event) {
     event.preventDefault();
@@ -140,9 +129,22 @@ function closePopup(popup) {
 
     inputList.forEach((inputElement) => {
         hideInputError(formElement, inputElement, validationList);
-    })
+    });
 
-    popupForm.reset();    
+    if (formElement) {
+        popupForm.reset();  
+    }  
+}
+
+function addEvtClosePopupByMouse(popup) {
+    popup.addEventListener('mousedown', function (evt) {
+        const target = evt.target;
+        const targetClassList = target.classList;
+
+        if (targetClassList.contains("popup__close-btn") || targetClassList.contains("popup")) {
+            closePopup(popup);
+        }
+    });
 }
 
 profileEditButton.addEventListener("click",  () => {
@@ -156,18 +158,19 @@ profileAdd.addEventListener("click",  () => {
 
 popupEditForm.addEventListener("submit",  handleSubmitProfileChanges);
 
+popupList.forEach(addEvtClosePopupByMouse);
 
-popupAddPlaceForm.addEventListener("submit",  event => {
+popupAddPlaceForm.addEventListener("submit",  (event) => {
     event.preventDefault();
     const place = placeNameInput.value;
     const image = imageSourceInput.value;
+    
     renderCard(createPlace(place, image), true);
     closePopup(popupAddPlace);
+
     event.target.reset(); 
 });
 
 initialCards.forEach(item => renderCard(createPlace(item["name"], item["link"])));
-
-// Код валидации
 
 enableValidation(validationList);
