@@ -4,13 +4,6 @@ function disableEnterBtn(evt) {
     }
 }
 
-function closePopupKeyboard(evt) {
-    const openedPopup = document.querySelector(".popup_opened");
-    if (evt.key === 'Escape' && openedPopup) {
-        closePopup(openedPopup);
-    }
-}
-
 function showInputError(formElement, inputElement, validationList, errorMessage){
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
     inputElement.classList.add(`${validationList.inputErrorClass}`);
@@ -36,8 +29,6 @@ function checkInputValidity(formElement, inputElement, validationList){
 function setEventListeners(formElement, validationList){
     const inputList = Array.from(formElement.querySelectorAll(`${validationList.inputSelector}`));
     const buttonElement = formElement.querySelector(`${validationList.submitButtonSelector}`);
-
-    toggleButtonState(inputList, buttonElement, validationList);
     
     inputList.forEach((inputElement) => {
         inputElement.addEventListener('input', () => {

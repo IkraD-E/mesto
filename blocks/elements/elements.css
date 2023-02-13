@@ -1,9 +1,11 @@
 .elements {
     margin: 50px 0 0;
+    min-height: 50vh;
 }
 
 @media screen and (max-width: 767px) {
     .elements {
         margin-top: 36px;
+        min-height: 40vh;
     }
 }

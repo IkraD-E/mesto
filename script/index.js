@@ -50,24 +50,22 @@ const validationList = {
 }
 
 elementsList.addEventListener('click', function (evt) {
-    if (evt.target.classList.contains("element__like-btn")) {
-        evt.target.classList.toggle("element__like-btn_active");
-    }
-});
-
-elementsList.addEventListener('click', function (evt) {
-    if (evt.target.classList.contains("element_delete_button")) {
-        handleDeletePlace(evt);
-    }
-});
-
-elementsList.addEventListener('click', function (evt) {
-    if (evt.target.classList.contains("element__photo")) {
-        elementPhoto.src = evt.target.src;
-        elementPhoto.alt = evt.target.alt;
-        elementPhotoHeader.textContent = evt.target.alt;
+    const target = evt.target;
+    const targetClassList = target.classList;
+    if (targetClassList.contains("element__photo")) {
+        elementPhoto.src = target.src;
+        elementPhoto.alt = target.alt;
+        elementPhotoHeader.textContent = target.alt;
 
         openPopup(popupImage);
+    }
+
+    if (targetClassList.contains("element_delete_button")) {
+        handleDeletePlace(evt);
+    }
+
+    if (targetClassList.contains("element__like-btn")) {
+        targetClassList.toggle("element__like-btn_active");
     }
 });
 
@@ -102,16 +100,15 @@ function handleDeletePlace(event) {
 }
 
 function openPopup(popup) {
-    const buttonElement = popup.querySelector('.popup__button');
-
     popup.classList.add("popup_opened");
     document.addEventListener("keydown", closePopupKeyboard);
-    if (buttonElement) {
-        const inputList = Array.from(popup.querySelectorAll(`${validationList.inputSelector}`));
+}
 
-        toggleButtonState(inputList, buttonElement, validationList);
-    }
+function toggleButtonPopupOpening(popup) {
+    const buttonElement = popup.querySelector('.popup__button');
+    const inputList = Array.from(popup.querySelectorAll(`${validationList.inputSelector}`));
 
+    toggleButtonState(inputList, buttonElement, validationList);
 }
 
 function getProfileInfo() {
@@ -120,20 +117,31 @@ function getProfileInfo() {
 }
 
 function closePopup(popup) {
+    popup.classList.remove("popup_opened");
+    document.removeEventListener("keydown", closePopupKeyboard);
+}
+
+function resetPopupInputs(popup) {
     const inputList = Array.from(popup.querySelectorAll(".popup__input"));
     const popupForm = popup.querySelector('.popup__form');
     const formElement = popup.querySelector(".popup__form");
 
-    popup.classList.remove("popup_opened");
-    document.removeEventListener("keydown", closePopupKeyboard);
-
     inputList.forEach((inputElement) => {
         hideInputError(formElement, inputElement, validationList);
     });
-
     if (formElement) {
         popupForm.reset();  
-    }  
+    }
+}
+
+function closePopupKeyboard(evt) {
+    if (evt.key === 'Escape') {  
+        const openedPopup = document.querySelector(".popup_opened");
+        if (openedPopup) {
+            resetPopupInputs(openedPopup);
+            closePopup(openedPopup);
+        }
+    }
 }
 
 function addEvtClosePopupByMouse(popup) {
@@ -142,6 +150,7 @@ function addEvtClosePopupByMouse(popup) {
         const targetClassList = target.classList;
 
         if (targetClassList.contains("popup__close-btn") || targetClassList.contains("popup")) {
+            resetPopupInputs(popup);
             closePopup(popup);
         }
     });
@@ -150,26 +159,32 @@ function addEvtClosePopupByMouse(popup) {
 profileEditButton.addEventListener("click",  () => {
     getProfileInfo();
     openPopup(profileChange);
+    toggleButtonPopupOpening(profileChange);
 });
 
 profileAdd.addEventListener("click",  () => {
     openPopup(popupAddPlace);
+    toggleButtonPopupOpening(popupAddPlace);
 });
 
 popupEditForm.addEventListener("submit",  handleSubmitProfileChanges);
 
 popupList.forEach(addEvtClosePopupByMouse);
 
-popupAddPlaceForm.addEventListener("submit",  (event) => {
+popupAddPlaceForm.addEventListener("submit",  addNewPlace);
+
+function addNewPlace(event) {
     event.preventDefault();
     const place = placeNameInput.value;
     const image = imageSourceInput.value;
     
     renderCard(createPlace(place, image), true);
+    resetPopupInputs(popupAddPlace);
     closePopup(popupAddPlace);
 
     event.target.reset(); 
-});
+
+}
 
 initialCards.forEach(item => renderCard(createPlace(item["name"], item["link"])));
 
