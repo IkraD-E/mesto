@@ -49,21 +49,6 @@ const validationList = {
     errorClass: 'popup__error_visible'
 }
 
-elementsList.addEventListener('click', function (evt) {
-    const target = evt.target;
-    const likeBtn = placeElement.querySelector(".element__like-btn");
-    const targetClassList = target.classList;
-    if (targetClassList.contains("element__photo")) 
-
-    if (targetClassList.contains("element_delete_button")) {
-        handleDeletePlace(evt);
-    }
-
-    if (targetClassList.contains("element__like-btn")) {
-        targetClassList.toggle("element__like-btn_active");
-    }
-});
-
 function handleSubmitProfileChanges(event) {
     event.preventDefault();
     nameProfile.textContent = nameInput.value;
