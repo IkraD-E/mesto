@@ -154,6 +154,19 @@ function addEvtClosePopupByMouse(popup) {
     });
 }
 
+function addNewPlace(event) {
+    event.preventDefault();
+    const place = placeNameInput.value;
+    const image = imageSourceInput.value;
+    
+    renderCard(createPlace(place, image), true);
+    resetPopupInputs(popupAddPlace);
+    closePopup(popupAddPlace);
+
+    event.target.reset(); 
+
+}
+
 profileEditButton.addEventListener("click",  () => {
     getProfileInfo();
     openPopup(profileChange);
@@ -170,19 +183,6 @@ popupEditForm.addEventListener("submit",  handleSubmitProfileChanges);
 popupList.forEach(addEvtClosePopupByMouse);
 
 popupAddPlaceForm.addEventListener("submit",  addNewPlace);
-
-function addNewPlace(event) {
-    event.preventDefault();
-    const place = placeNameInput.value;
-    const image = imageSourceInput.value;
-    
-    renderCard(createPlace(place, image), true);
-    resetPopupInputs(popupAddPlace);
-    closePopup(popupAddPlace);
-
-    event.target.reset(); 
-
-}
 
 initialCards.forEach(item => renderCard(createPlace(item["name"], item["link"])));
 
