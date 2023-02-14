@@ -36,7 +36,7 @@ const popupAddPlaceCloseBtn = popupAddPlace.querySelector(".popup__close-btn");
 
 const elementPhoto = popupImage.querySelector(".popup__image");
 
-const elementPhotoHeader = popupImage.querySelector(".popup__image-header");
+const popupPhotoHeader = popupImage.querySelector(".popup__image-header");
 
 const popupList = Array.from(document.querySelectorAll(".popup"));
 
@@ -51,14 +51,9 @@ const validationList = {
 
 elementsList.addEventListener('click', function (evt) {
     const target = evt.target;
+    const likeBtn = placeElement.querySelector(".element__like-btn");
     const targetClassList = target.classList;
-    if (targetClassList.contains("element__photo")) {
-        elementPhoto.src = target.src;
-        elementPhoto.alt = target.alt;
-        elementPhotoHeader.textContent = target.alt;
-
-        openPopup(popupImage);
-    }
+    if (targetClassList.contains("element__photo")) 
 
     if (targetClassList.contains("element_delete_button")) {
         handleDeletePlace(evt);
@@ -84,19 +79,37 @@ function renderCard(cardElement, isStart) {
     }
 }
 
+function handleDeletePlace(event) {
+    event.target.closest(".element").remove();
+}
+
+function tuggleLikeBtn(evt) {
+    evt.target.classList.toggle("element__like-btn_active");
+}
+
 function createPlace(placeName, placeImage) {
     const placeElement = placeTemplate.querySelector(".element").cloneNode(true);
+    const likeBtn = placeElement.querySelector(".element__like-btn");
     const placeElementPhoto = placeElement.querySelector(".element__photo");
+    const placeElementDelBtn = placeElement.querySelector(".element_delete_button");
 
     placeElement.querySelector(".element__title").textContent = placeName;
     placeElementPhoto.src = placeImage;
     placeElementPhoto.alt = placeName;
+    
+    likeBtn.addEventListener("click", tuggleLikeBtn);
+
+    placeElementDelBtn.addEventListener("click", handleDeletePlace);
+
+    placeElementPhoto.addEventListener("click", () => {
+        elementPhoto.src = placeElementPhoto.src;
+        elementPhoto.alt = placeName;
+        popupPhotoHeader.textContent = placeName;
+
+        openPopup(popupImage);
+    });
 
     return(placeElement);
-}
-
-function handleDeletePlace(event) {
-    event.target.closest(".element").remove();
 }
 
 function openPopup(popup) {
