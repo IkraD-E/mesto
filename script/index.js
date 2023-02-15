@@ -127,28 +127,30 @@ function resetPopupInputs(popup) {
     inputList.forEach((inputElement) => {
         hideInputError(formElement, inputElement, validationList);
     });
-    if (formElement) {
-        popupForm.reset();  
-    }
+
+    popupForm.reset();  
 }
 
 function closePopupKeyboard(evt) {
     if (evt.key === 'Escape') {  
         const openedPopup = document.querySelector(".popup_opened");
         if (openedPopup) {
-            resetPopupInputs(openedPopup);
+            if (!openedPopup.classList.contains("popup_type_image")) {
+                resetPopupInputs(popup);
+            }
             closePopup(openedPopup);
         }
     }
 }
 
 function addEvtClosePopupByMouse(popup) {
-    popup.addEventListener('mousedown', function (evt) {
-        const target = evt.target;
-        const targetClassList = target.classList;
+    popup.addEventListener('mousedown', (evt) => {
+        const targetClassList = evt.target.classList;
 
         if (targetClassList.contains("popup__close-btn") || targetClassList.contains("popup")) {
-            resetPopupInputs(popup);
+            if (!document.querySelector(".popup_opened").classList.contains("popup_type_image")) {
+                resetPopupInputs(popup);
+            }
             closePopup(popup);
         }
     });
