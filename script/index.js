@@ -135,9 +135,6 @@ function closePopupKeyboard(evt) {
     if (evt.key === 'Escape') {  
         const openedPopup = document.querySelector(".popup_opened");
         if (openedPopup) {
-            if (!openedPopup.classList.contains("popup_type_image")) {
-                resetPopupInputs(popup);
-            }
             closePopup(openedPopup);
         }
     }
@@ -148,9 +145,6 @@ function addEvtClosePopupByMouse(popup) {
         const targetClassList = evt.target.classList;
 
         if (targetClassList.contains("popup__close-btn") || targetClassList.contains("popup")) {
-            if (!document.querySelector(".popup_opened").classList.contains("popup_type_image")) {
-                resetPopupInputs(popup);
-            }
             closePopup(popup);
         }
     });
@@ -170,12 +164,14 @@ function addNewPlace(event) {
 }
 
 profileEditButton.addEventListener("click",  () => {
+    resetPopupInputs(profileChange);
     getProfileInfo();
     openPopup(profileChange);
     toggleButtonPopupOpening(profileChange);
 });
 
 profileAdd.addEventListener("click",  () => {
+    resetPopupInputs(popupAddPlace);
     openPopup(popupAddPlace);
     toggleButtonPopupOpening(popupAddPlace);
 });
