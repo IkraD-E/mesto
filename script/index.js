@@ -24,23 +24,9 @@ const nameProfile = document.querySelector(".profile__header");
 
 const jobProfile = document.querySelector(".profile__text");
 
-const popupImage = document.querySelector("#popup__image");
-
 const elementsList = document.querySelector(".elements__list");
 
-const placeTemplate = document.querySelector("#element-template").content;
-
 const popupAddPlaceForm = popupAddPlace.querySelector(".popup__form");
-
-const popupImageCloseBtn = popupImage.querySelector(".popup__close-btn");
-
-const popupEditCloseBtn = profileChange.querySelector(".popup__close-btn");
-
-const popupAddPlaceCloseBtn = popupAddPlace.querySelector(".popup__close-btn");
-
-const elementPhoto = popupImage.querySelector(".popup__image");
-
-const popupPhotoHeader = popupImage.querySelector(".popup__image-header");
 
 const popupList = Array.from(document.querySelectorAll(".popup"));
 
