@@ -1,4 +1,4 @@
-class FormValidator {
+export default class FormValidator {
     constructor(validatoionList, popupForm) {
         this._popupForm = popupForm;
         this._inputList = this._popupForm.querySelectorAll(validatoionList.inputSelector);
@@ -42,7 +42,7 @@ class FormValidator {
                 this._checkInputValidity(inputElement);
                 this._toggleButtonState();
             });
-            
+
             inputElement.addEventListener('keydown', this._disableEnterBtn);
             inputElement.addEventListener("keydown", this._closePopupKeyboard);
         });
@@ -68,4 +68,3 @@ class FormValidator {
         this._setEventListeners();
     }
 }
-

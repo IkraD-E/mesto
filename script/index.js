@@ -1,3 +1,7 @@
+import Card from "./Card.js";
+
+import FormValidator from "./FormValidator.js";
+
 const popupAddPlace = document.querySelector("#popup__add-place");
 
 const profileChange = document.querySelector("#popup__change-profile");
@@ -72,6 +76,27 @@ function toggleButtonPopupOpening(popup) {
     const inputList = Array.from(popup.querySelectorAll(`${validationList.inputSelector}`));
 
     toggleButtonState(inputList, buttonElement, validationList);
+}
+  
+function toggleButtonState(inputList, buttonElement, validationList) {
+    if (hasInvalidInput(inputList)) {
+        buttonElement.classList.add(`${validationList.inactiveButtonClass}`);
+    } else {
+        buttonElement.classList.remove(`${validationList.inactiveButtonClass}`);
+    }
+}
+
+function hasInvalidInput(inputList) {
+    return inputList.some((inputElement) => {
+        return !inputElement.validity.valid;
+    });
+}
+  
+function hideInputError(formElement, inputElement, validationList){
+    const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+    inputElement.classList.remove(`${validationList.inputErrorClass}`);
+    errorElement.classList.remove('popup__error_active');
+    errorElement.textContent = '';
 }
 
 function closePopup(popup) {
