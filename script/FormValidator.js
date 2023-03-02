@@ -40,11 +40,10 @@ export default class FormValidator {
         this._inputList.forEach((inputElement) => {
             inputElement.addEventListener('input', () => {
                 this._checkInputValidity(inputElement);
-                this._toggleButtonState();
+                this._toggleButtonState(inputElement);
             });
-
-            inputElement.addEventListener('keydown', this._disableEnterBtn);
-            inputElement.addEventListener("keydown", this._closePopupKeyboard);
+            
+            this._toggleButtonState(inputElement);
         });
     }
 
@@ -54,11 +53,15 @@ export default class FormValidator {
         });
     }
 
-    _toggleButtonState() {
+    _toggleButtonState(inputElement) {
         if (this._hasInvalidInput()) {
             this._submitButtonSelector.classList.add(`${this._inactiveButtonClass}`);
+            this._submitButtonSelector.disabled = true;
+            inputElement.addEventListener('keydown', this._disableEnterBtn);
         } else {
             this._submitButtonSelector.classList.remove(`${this._inactiveButtonClass}`);
+            inputElement.removeEventListener('keydown', this._disableEnterBtn);
+            this._submitButtonSelector.disabled = false;
         }
     }
 

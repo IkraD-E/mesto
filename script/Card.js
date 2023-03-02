@@ -32,6 +32,11 @@ export default class Card {
 
         return delBtn;
     }
+    
+    _openPopup(popup) {
+        popup.classList.add("popup_opened");
+        document.addEventListener("keydown", this._closePopupKeyboard);
+    }
 
     _handleOpenPopup() {
         const _popupImage = document.querySelector("#popup__image");
@@ -43,12 +48,15 @@ export default class Card {
         _popupPhotoHeader.textContent = this._placeName;
 
         _popupImage.classList.add("popup_opened");
-        document.addEventListener("keydown", closePopupKeyboard);
+        document.addEventListener("keydown", this._closePopupKeyboard);
     }
 
-    _handleClosePopup() {
-        popupImage.classList.remove("popup_opened");
-        document.removeEventListener("keydown", closePopupKeyboard);
+    _closePopupKeyboard(evt) {
+        const openedPopup = document.querySelector(".popup_opened");
+        if (evt.key === 'Escape') {
+            openedPopup.classList.remove("popup_opened");
+            document.removeEventListener("keydown", this._closePopupKeyboard);
+        }
     }
 
     _handleTuggleLikeBtn(evt) {
