@@ -32,6 +32,14 @@ const popupList = Array.from(document.querySelectorAll(".popup"));
 
 const formList = document.querySelectorAll('.popup__form')
 
+const popupImage = document.querySelector('#popup__image');
+
+const popupImagePhoto = popupImage.querySelector(".popup__image");
+
+const popupImageHeader = popupImage.querySelector(".popup__image-header");
+
+const formValidators = {};
+
 const validationList = {
     inputSelector: '.popup__input',
     submitButtonSelector: '.popup__button',
@@ -40,11 +48,21 @@ const validationList = {
     errorClass: 'popup__error_visible'
 }
 
+function handleCardClick(name = "", link = "") {
+    popupImagePhoto.src = link;
+    popupImagePhoto.alt = name;
+    popupImageHeader.textContent = name;
+
+    openPopup(popupImage);
+}
+
 function handleSubmitProfileChanges(event) {
     event.preventDefault();
     nameProfile.textContent = nameInput.value;
     jobProfile.textContent = jobInput.value;
     closePopup(profileChange);
+
+    profileEditButton.focus()
 }
 
 function getProfileInfo() {
@@ -57,52 +75,12 @@ function openPopup(popup) {
     document.addEventListener("keydown", closePopupKeyboard);
 }
 
-function toggleButtonPopupOpening(popup) {
-    const buttonElement = popup.querySelector('.popup__button');
-    const inputList = Array.from(popup.querySelectorAll(`${validationList.inputSelector}`));
-
-    toggleButtonState(inputList, buttonElement, validationList);
-}
-  
-function toggleButtonState(inputList, buttonElement, validationList) {
-    if (hasInvalidInput(inputList)) {
-        buttonElement.classList.add(`${validationList.inactiveButtonClass}`);
-    } else {
-        buttonElement.classList.remove(`${validationList.inactiveButtonClass}`);
-    }
-}
-
-function hasInvalidInput(inputList) {
-    return inputList.some((inputElement) => {
-        return !inputElement.validity.valid;
-    });
-}
-  
-function hideInputError(formElement, inputElement, validationList){
-    const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-    inputElement.classList.remove(`${validationList.inputErrorClass}`);
-    errorElement.classList.remove('popup__error_active');
-    errorElement.textContent = '';
-}
-
 function closePopup(popup) {
     popup.classList.remove("popup_opened");
     document.removeEventListener("keydown", closePopupKeyboard);
 }
 
-function resetPopupInputs(popup) {
-    const inputList = Array.from(popup.querySelectorAll(".popup__input"));
-    const popupForm = popup.querySelector('.popup__form');
-    const formElement = popup.querySelector(".popup__form");
-
-    inputList.forEach((inputElement) => {
-        hideInputError(formElement, inputElement, validationList);
-    });
-
-    popupForm.reset();  
-}
-
-function closePopupKeyboard(evt) {
+export function closePopupKeyboard(evt) {
     if (evt.key === 'Escape') {  
         const openedPopup = document.querySelector(".popup_opened");
         if (openedPopup) {
@@ -122,7 +100,7 @@ function addEvtClosePopupByMouse(popup) {
 }
 
 function generateCard(element) {
-    const card = new Card(element, '#element-template');
+    const card = new Card(element, '#element-template', handleCardClick);
     const cardElement = card.generateCard();
 
     return cardElement;
@@ -144,26 +122,26 @@ function addNewPlace(event) {
     }
     
     renderCard(generateCard(element), true);
-    resetPopupInputs(popupAddPlace);
+    formValidators['add-place-form'].resetValidation()
     closePopup(popupAddPlace);
 
     event.target.reset(); 
+
+    profileAdd.focus()
 }
 
 profileEditButton.addEventListener("click",  () => {
-    resetPopupInputs(profileChange);
+    formValidators['profile-form'].resetValidation()
     getProfileInfo();
     openPopup(profileChange);
-    toggleButtonPopupOpening(profileChange);
 });
 
 profileAdd.addEventListener("click",  () => {
-    resetPopupInputs(popupAddPlace);
+    formValidators['add-place-form'].resetValidation()
     openPopup(popupAddPlace);
-    toggleButtonPopupOpening(popupAddPlace);
 });
 
-popupEditForm.addEventListener("submit",  handleSubmitProfileChanges);
+popupEditForm.addEventListener("submit", handleSubmitProfileChanges);
 
 popupList.forEach(addEvtClosePopupByMouse);
 
@@ -173,8 +151,16 @@ initialCards.forEach(element => {
     renderCard(generateCard(element));
 })
 
-formList.forEach(formElement => {
-    const validation = new FormValidator(validationList, formElement);
-    
-    validation.enableValidation();
-})
+const enableValidation = (formSelector) => {
+    const formList = Array.from(document.querySelectorAll(formSelector));
+    formList.forEach((formElement) => {
+        const validator = new FormValidator(validationList, formElement);
+        const formName = formElement.getAttribute('name');
+
+        formValidators[formName] = validator;
+
+        validator.enableValidation();
+    })
+}
+
+enableValidation(".popup__form");

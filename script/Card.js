@@ -1,9 +1,11 @@
 export default class Card {
-    constructor(data, templateSelector) {
+    constructor(data, templateSelector, handleCardClick) {
         this._placeName = data.name;
         this._placeImage = data.link;
         this._templateSelector = templateSelector;
+        this._handleCardClick = handleCardClick;
     }
+
 
     _getTemplate() {
         const cardElement = document
@@ -33,32 +35,6 @@ export default class Card {
         return delBtn;
     }
     
-    _openPopup(popup) {
-        popup.classList.add("popup_opened");
-        document.addEventListener("keydown", this._closePopupKeyboard);
-    }
-
-    _handleOpenPopup() {
-        const _popupImage = document.querySelector("#popup__image");
-        const _elementPhoto = _popupImage.querySelector(".popup__image");
-        const _popupPhotoHeader = _popupImage.querySelector(".popup__image-header");
-
-        _elementPhoto.src = this._placeImage;
-        _elementPhoto.alt = this._placeName;
-        _popupPhotoHeader.textContent = this._placeName;
-
-        _popupImage.classList.add("popup_opened");
-        document.addEventListener("keydown", this._closePopupKeyboard);
-    }
-
-    _closePopupKeyboard(evt) {
-        const openedPopup = document.querySelector(".popup_opened");
-        if (evt.key === 'Escape') {
-            openedPopup.classList.remove("popup_opened");
-            document.removeEventListener("keydown", this._closePopupKeyboard);
-        }
-    }
-
     _handleTuggleLikeBtn(evt) {
         evt.target.classList.toggle("element__like-btn_active");
     }
@@ -69,12 +45,10 @@ export default class Card {
 
     _setEventListeners() {
         this._elementPhoto.addEventListener("click", () => {
-            this._handleOpenPopup();
+            this._handleCardClick(this._placeName, this._placeImage)
         });
 
-        this._likeBtn.addEventListener("click", evt => 
-            this._handleTuggleLikeBtn(evt)
-        );
+        this._likeBtn.addEventListener("click", this._handleTuggleLikeBtn);
 
         this._delBtn.addEventListener("click", this._handleDeletePlace);
     }

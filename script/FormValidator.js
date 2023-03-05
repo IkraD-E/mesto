@@ -2,7 +2,7 @@ export default class FormValidator {
     constructor(validatoionList, popupForm) {
         this._popupForm = popupForm;
         this._inputList = this._popupForm.querySelectorAll(validatoionList.inputSelector);
-        this._submitButtonSelector = this._popupForm.querySelector(validatoionList.submitButtonSelector); 
+        this._submitButton = this._popupForm.querySelector(validatoionList.submitButtonSelector); 
         this._inactiveButtonClass = validatoionList.inactiveButtonClass;
         this._inputErrorClass = validatoionList.inputErrorClass;
         this._errorClass = validatoionList.errorClass;
@@ -14,17 +14,27 @@ export default class FormValidator {
         }
     }
 
+    resetValidation() {
+        this._inputList.forEach((inputElement) => {
+            this._hideInputError(inputElement);
+
+            this._toggleButtonState(inputElement);
+        })
+
+        this._popupForm.reset();
+    }
+
     _showInputError (inputElement, errorMessage) {
         const errorElement = this._popupForm.querySelector(`.${inputElement.id}-error`);
         inputElement.classList.add(`${this._inputErrorClass}`);
         errorElement.textContent = errorMessage;
-        errorElement.classList.add('popup__error_active');
+        errorElement.classList.add(this._errorClass);
     }
 
     _hideInputError(inputElement) {
         const errorElement = this._popupForm.querySelector(`.${inputElement.id}-error`);
         inputElement.classList.remove(`${this._inputErrorClass}`);
-        errorElement.classList.remove('popup__error_active');
+        errorElement.classList.remove(this._errorClass);
         errorElement.textContent = '';
     }
 
@@ -55,14 +65,17 @@ export default class FormValidator {
 
     _toggleButtonState(inputElement) {
         if (this._hasInvalidInput()) {
-            this._submitButtonSelector.classList.add(`${this._inactiveButtonClass}`);
-            this._submitButtonSelector.disabled = true;
-            inputElement.addEventListener('keydown', this._disableEnterBtn);
+            this._submitButton.classList.add(`${this._inactiveButtonClass}`);
+            this._submitButton.disabled = true;
+            this._popupForm.addEventListener('submit', evt => evt.preventDefault());
         } else {
-            this._submitButtonSelector.classList.remove(`${this._inactiveButtonClass}`);
-            inputElement.removeEventListener('keydown', this._disableEnterBtn);
-            this._submitButtonSelector.disabled = false;
+            this._submitButton.classList.remove(`${this._inactiveButtonClass}`);
+            this._submitButton.disabled = false;
         }
+    }
+
+    _toggleButtonPopupOpening() {
+        
     }
 
     enableValidation() {
