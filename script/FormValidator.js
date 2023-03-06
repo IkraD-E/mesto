@@ -8,20 +8,16 @@ export default class FormValidator {
         this._errorClass = validatoionList.errorClass;
     }
 
-    _disableEnterBtn(evt) {
-        if (evt.key === "Enter") {
-            evt.preventDefault();
-        }
-    }
-
     resetValidation() {
+        this._popupForm.reset();
+
+        this._toggleButtonState();
+
         this._inputList.forEach((inputElement) => {
             this._hideInputError(inputElement);
 
-            this._toggleButtonState(inputElement);
         })
 
-        this._popupForm.reset();
     }
 
     _showInputError (inputElement, errorMessage) {
@@ -50,10 +46,10 @@ export default class FormValidator {
         this._inputList.forEach((inputElement) => {
             inputElement.addEventListener('input', () => {
                 this._checkInputValidity(inputElement);
-                this._toggleButtonState(inputElement);
+                this._toggleButtonState();
             });
             
-            this._toggleButtonState(inputElement);
+            this._toggleButtonState();
         });
     }
 
@@ -63,19 +59,14 @@ export default class FormValidator {
         });
     }
 
-    _toggleButtonState(inputElement) {
+    _toggleButtonState() {
         if (this._hasInvalidInput()) {
             this._submitButton.classList.add(`${this._inactiveButtonClass}`);
             this._submitButton.disabled = true;
-            this._popupForm.addEventListener('submit', evt => evt.preventDefault());
         } else {
             this._submitButton.classList.remove(`${this._inactiveButtonClass}`);
             this._submitButton.disabled = false;
         }
-    }
-
-    _toggleButtonPopupOpening() {
-        
     }
 
     enableValidation() {

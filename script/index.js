@@ -41,6 +41,7 @@ const popupImageHeader = popupImage.querySelector(".popup__image-header");
 const formValidators = {};
 
 const validationList = {
+    formSelector: ".popup__form",
     inputSelector: '.popup__input',
     submitButtonSelector: '.popup__button',
     inactiveButtonClass: 'popup__button_disabled',
@@ -122,10 +123,7 @@ function addNewPlace(event) {
     }
     
     renderCard(generateCard(element), true);
-    formValidators['add-place-form'].resetValidation()
     closePopup(popupAddPlace);
-
-    event.target.reset(); 
 
     profileAdd.focus()
 }
@@ -151,8 +149,8 @@ initialCards.forEach(element => {
     renderCard(generateCard(element));
 })
 
-const enableValidation = (formSelector) => {
-    const formList = Array.from(document.querySelectorAll(formSelector));
+const enableValidation = (validationList) => {
+    const formList = Array.from(document.querySelectorAll(validationList.formSelector));
     formList.forEach((formElement) => {
         const validator = new FormValidator(validationList, formElement);
         const formName = formElement.getAttribute('name');
@@ -163,4 +161,4 @@ const enableValidation = (formSelector) => {
     })
 }
 
-enableValidation(".popup__form");
+enableValidation(validationList);
