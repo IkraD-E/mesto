@@ -2,6 +2,15 @@ import Card from "./Card.js";
 
 import FormValidator from "./FormValidator.js";
 
+import { initialCards } from "./cards.js";
+
+import { Section } from "./Section.js";
+
+import {PopupWithImage} from "./PopupWithImage.js";
+
+// const popupWithImage = new PopupWithImage(this._placeImage, this._placeName, ".popup_type_image")
+
+
 const popupAddPlace = document.querySelector("#popup__add-place");
 
 const profileChange = document.querySelector("#popup__change-profile");
@@ -30,7 +39,7 @@ const popupAddPlaceForm = popupAddPlace.querySelector(".popup__form");
 
 const popupList = Array.from(document.querySelectorAll(".popup"));
 
-const formList = document.querySelectorAll('.popup__form')
+const formList = document.querySelectorAll('.popup__form');
 
 const popupImage = document.querySelector('#popup__image');
 
@@ -145,10 +154,6 @@ popupList.forEach(addEvtClosePopupByMouse);
 
 popupAddPlaceForm.addEventListener("submit",  addNewPlace);
 
-initialCards.forEach(element => {
-    renderCard(generateCard(element));
-})
-
 const enableValidation = (validationList) => {
     const formList = Array.from(document.querySelectorAll(validationList.formSelector));
     formList.forEach((formElement) => {
@@ -162,3 +167,15 @@ const enableValidation = (validationList) => {
 }
 
 enableValidation(validationList);
+
+const defaultCardList = new Section({ items:initialCards, 
+        renderer: (element) => {
+            const card = new Card(element, '#element-template', handleCardClick);
+
+            const cardElement = card.generateCard();
+
+            return cardElement;
+        }
+    }, '.elements__list');
+
+defaultCardList.createCard()

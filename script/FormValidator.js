@@ -1,11 +1,11 @@
 export default class FormValidator {
-    constructor(validatoionList, popupForm) {
+    constructor({inputSelector, submitButtonSelector, inactiveButtonClass, inputErrorClass, errorClass}, popupForm) {
         this._popupForm = popupForm;
-        this._inputList = this._popupForm.querySelectorAll(validatoionList.inputSelector);
-        this._submitButton = this._popupForm.querySelector(validatoionList.submitButtonSelector); 
-        this._inactiveButtonClass = validatoionList.inactiveButtonClass;
-        this._inputErrorClass = validatoionList.inputErrorClass;
-        this._errorClass = validatoionList.errorClass;
+        this._inputList = this._popupForm.querySelectorAll(inputSelector);
+        this._submitButton = this._popupForm.querySelector(submitButtonSelector); 
+        this._inactiveButtonClass = inactiveButtonClass;
+        this._inputErrorClass = inputErrorClass;
+        this._errorClass = errorClass;
     }
 
     resetValidation() {
