@@ -8,7 +8,7 @@ import { Section } from "./Section.js";
 
 import {PopupWithImage} from "./PopupWithImage.js";
 
-// const popupWithImage = new PopupWithImage(this._placeImage, this._placeName, ".popup_type_image")
+// const popupWithImage = new PopupWithImage(link, name, ".popup_type_image")
 
 
 const popupAddPlace = document.querySelector("#popup__add-place");
@@ -58,12 +58,12 @@ const validationList = {
     errorClass: 'popup__error_visible'
 }
 
-function handleCardClick(name = "", link = "") {
-    popupImagePhoto.src = link;
-    popupImagePhoto.alt = name;
-    popupImageHeader.textContent = name;
+const popupWithImage = new PopupWithImage(".popup_type_image");
 
-    openPopup(popupImage);
+popupWithImage.setEventListeners();
+
+function handleCardClick(name, link) {
+    popupWithImage.open(name, link);
 }
 
 function handleSubmitProfileChanges(event) {
@@ -97,16 +97,6 @@ export function closePopupKeyboard(evt) {
             closePopup(openedPopup);
         }
     }
-}
-
-function addEvtClosePopupByMouse(popup) {
-    popup.addEventListener('mousedown', (evt) => {
-        const targetClassList = evt.target.classList;
-
-        if (targetClassList.contains("popup__close-btn") || targetClassList.contains("popup")) {
-            closePopup(popup);
-        }
-    });
 }
 
 function generateCard(element) {
@@ -149,8 +139,6 @@ profileAdd.addEventListener("click",  () => {
 });
 
 popupEditForm.addEventListener("submit", handleSubmitProfileChanges);
-
-popupList.forEach(addEvtClosePopupByMouse);
 
 popupAddPlaceForm.addEventListener("submit",  addNewPlace);
 
