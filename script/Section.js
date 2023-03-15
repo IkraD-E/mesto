@@ -7,11 +7,11 @@ export class Section{
 
     createCard(){
         this._renderedItems.forEach(element => {
-            this.addItem(this._renderer(element));
+            this.addItem(element);
         });
     }
 
     addItem(element){
-        this._container.prepend(element);
+        this._container.prepend(this._renderer(element));
     }
 }

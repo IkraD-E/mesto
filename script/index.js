@@ -8,14 +8,17 @@ import { Section } from "./Section.js";
 
 import {PopupWithImage} from "./PopupWithImage.js";
 
-// const popupWithImage = new PopupWithImage(link, name, ".popup_type_image")
+import { PopupWithForm } from "./PopupWithForm.js";
 
+import { UserInfo } from "./UserInfo.js";
+
+// const userInfo = new UserInfo('.profile__header', '.profile__text');
+
+// console.log(userInfo.getUserInfo()['info']);
 
 const popupAddPlace = document.querySelector("#popup__add-place");
 
 const profileChange = document.querySelector("#popup__change-profile");
-
-const popupEditForm = profileChange.querySelector(".popup__form");
 
 const nameInput = profileChange.querySelector(".popup__input_type_initial");
 
@@ -32,20 +35,6 @@ const profileEditButton = document.querySelector(".profile__edit-button");
 const nameProfile = document.querySelector(".profile__header");
 
 const jobProfile = document.querySelector(".profile__text");
-
-const elementsList = document.querySelector(".elements__list");
-
-const popupAddPlaceForm = popupAddPlace.querySelector(".popup__form");
-
-const popupList = Array.from(document.querySelectorAll(".popup"));
-
-const formList = document.querySelectorAll('.popup__form');
-
-const popupImage = document.querySelector('#popup__image');
-
-const popupImagePhoto = popupImage.querySelector(".popup__image");
-
-const popupImageHeader = popupImage.querySelector(".popup__image-header");
 
 const formValidators = {};
 
@@ -66,11 +55,11 @@ function handleCardClick(name, link) {
     popupWithImage.open(name, link);
 }
 
-function handleSubmitProfileChanges(event) {
+const handleSubmitProfileChanges = (event) => {
     event.preventDefault();
     nameProfile.textContent = nameInput.value;
     jobProfile.textContent = jobInput.value;
-    closePopup(profileChange);
+    popupProfile.close();
 
     profileEditButton.focus()
 }
@@ -99,48 +88,18 @@ export function closePopupKeyboard(evt) {
     }
 }
 
-function generateCard(element) {
-    const card = new Card(element, '#element-template', handleCardClick);
-    const cardElement = card.generateCard();
-
-    return cardElement;
-}
-
-function renderCard(cardElement, isStart) {
-    if (isStart) {
-        elementsList.prepend(cardElement);
-    } else {
-        elementsList.append(cardElement);
-    }
-}
-
-function addNewPlace(event) {
-    event.preventDefault();
-    const element = {
-        name: placeNameInput.value,
-        link: imageSourceInput.value
-    }
-    
-    renderCard(generateCard(element), true);
-    closePopup(popupAddPlace);
-
-    profileAdd.focus()
-}
-
 profileEditButton.addEventListener("click",  () => {
-    formValidators['profile-form'].resetValidation()
+    formValidators['profile-form'].resetValidation();
     getProfileInfo();
     openPopup(profileChange);
 });
 
 profileAdd.addEventListener("click",  () => {
-    formValidators['add-place-form'].resetValidation()
-    openPopup(popupAddPlace);
+    popupPlace.open();
+    formValidators['add-place-form'].resetValidation();
 });
 
-popupEditForm.addEventListener("submit", handleSubmitProfileChanges);
-
-popupAddPlaceForm.addEventListener("submit",  addNewPlace);
+// Включение валидации
 
 const enableValidation = (validationList) => {
     const formList = Array.from(document.querySelectorAll(validationList.formSelector));
@@ -156,7 +115,9 @@ const enableValidation = (validationList) => {
 
 enableValidation(validationList);
 
-const defaultCardList = new Section({ items:initialCards, 
+// Создание стандартного набора карточек
+
+const CardList = new Section({ items:initialCards, 
         renderer: (element) => {
             const card = new Card(element, '#element-template', handleCardClick);
 
@@ -166,4 +127,27 @@ const defaultCardList = new Section({ items:initialCards,
         }
     }, '.elements__list');
 
-defaultCardList.createCard()
+CardList.createCard();
+
+// Логика на добавление новых мест
+
+const addNewPlace = (event) => {
+    event.preventDefault();
+    const element = {
+        name: placeNameInput.value,
+        link: imageSourceInput.value
+    }
+    
+    CardList.addItem(element);
+    popupPlace.close();
+
+    document.querySelector(".profile__add-button").focus()
+}
+
+const popupPlace = new PopupWithForm(addNewPlace,"#popup__add-place");
+
+const popupProfile = new PopupWithForm(handleSubmitProfileChanges,"#popup__change-profile");
+
+popupPlace.setEventListeners();
+
+popupProfile.setEventListeners();
