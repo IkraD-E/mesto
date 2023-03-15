@@ -12,9 +12,7 @@ import { PopupWithForm } from "./PopupWithForm.js";
 
 import { UserInfo } from "./UserInfo.js";
 
-// const userInfo = new UserInfo('.profile__header', '.profile__text');
-
-// console.log(userInfo.getUserInfo()['info']);
+const userInfo = new UserInfo('.profile__header', '.profile__text');
 
 const popupAddPlace = document.querySelector("#popup__add-place");
 
@@ -22,7 +20,7 @@ const profileChange = document.querySelector("#popup__change-profile");
 
 const nameInput = profileChange.querySelector(".popup__input_type_initial");
 
-const jobInput = profileChange.querySelector(".popup__input_type_description");
+const infoInput = profileChange.querySelector(".popup__input_type_description");
 
 const placeNameInput = popupAddPlace.querySelector(".popup__input_type_place-name");
 
@@ -34,7 +32,7 @@ const profileEditButton = document.querySelector(".profile__edit-button");
 
 const nameProfile = document.querySelector(".profile__header");
 
-const jobProfile = document.querySelector(".profile__text");
+const infoProfile = document.querySelector(".profile__text");
 
 const formValidators = {};
 
@@ -57,41 +55,21 @@ function handleCardClick(name, link) {
 
 const handleSubmitProfileChanges = (event) => {
     event.preventDefault();
-    nameProfile.textContent = nameInput.value;
-    jobProfile.textContent = jobInput.value;
+    userInfo.setNewUserInfo(nameInput.value, infoInput.value);
     popupProfile.close();
 
     profileEditButton.focus()
 }
 
-function getProfileInfo() {
-    nameInput.value = nameProfile.textContent; 
-    jobInput.value = jobProfile.textContent;
-}
-
-function openPopup(popup) {
-    popup.classList.add("popup_opened");
-    document.addEventListener("keydown", closePopupKeyboard);
-}
-
-function closePopup(popup) {
-    popup.classList.remove("popup_opened");
-    document.removeEventListener("keydown", closePopupKeyboard);
-}
-
-export function closePopupKeyboard(evt) {
-    if (evt.key === 'Escape') {  
-        const openedPopup = document.querySelector(".popup_opened");
-        if (openedPopup) {
-            closePopup(openedPopup);
-        }
-    }
+function setInputProfileInfo({ name, info }) {
+    nameInput.value = name; 
+    infoInput.value = info;
 }
 
 profileEditButton.addEventListener("click",  () => {
+    popupProfile.open();
     formValidators['profile-form'].resetValidation();
-    getProfileInfo();
-    openPopup(profileChange);
+    setInputProfileInfo(userInfo.getUserInfo());
 });
 
 profileAdd.addEventListener("click",  () => {
