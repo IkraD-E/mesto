@@ -14,34 +14,16 @@ import { PopupWithForm } from "./PopupWithForm.js";
 
 import { UserInfo } from "./UserInfo.js";
 
-const popupAddPlace = document.querySelector("#popup__add-place");
-
-const profileChange = document.querySelector("#popup__change-profile");
-
-const nameInput = profileChange.querySelector(".popup__input_type_initial");
-
-const infoInput = profileChange.querySelector(".popup__input_type_description");
-
-const placeNameInput = popupAddPlace.querySelector(".popup__input_type_place-name");
-
-const imageSourceInput = popupAddPlace.querySelector(".popup__input_type_image-source");
-
-const profileAdd = document.querySelector(".profile__add-button");
-
-const profileEditButton = document.querySelector(".profile__edit-button");
-
-const formValidators = {};
-
-const validationList = {
-    formSelector: ".popup__form",
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__button',
-    inactiveButtonClass: 'popup__button_disabled',
-    inputErrorClass: 'popup__input_type_error',
-    errorClass: 'popup__error_visible'
-}
-
-const userInfo = new UserInfo('.profile__header', '.profile__text');
+import { 
+    nameInput,
+    infoInput,
+    placeNameInput,
+    imageSourceInput,
+    profileAdd,
+    profileEditButton,
+    formValidators,
+    validationList 
+} from './utils/constants.js';
 
 const handleSubmitProfileChanges = (event) => {
     event.preventDefault();
@@ -55,6 +37,12 @@ function setInputProfileInfo({ name, info }) {
     nameInput.value = name; 
     infoInput.value = info;
 }
+
+// Сбор информации с сайта
+
+const userInfo = new UserInfo('.profile__header', '.profile__text');
+
+// Логика открытия попапов с редактированием профиля и добавления мест
 
 profileEditButton.addEventListener("click",  () => {
     popupProfile.open();
@@ -97,7 +85,7 @@ const CardList = new Section({ items:initialCards,
 
 CardList.createCard();
 
-// Логика на добавление новых мест
+// Логика добавления карточек новых мест
 
 const addNewPlace = (event) => {
     event.preventDefault();
@@ -115,6 +103,8 @@ const addNewPlace = (event) => {
 const popupPlace = new PopupWithForm(addNewPlace,"#popup__add-place");
 
 const popupProfile = new PopupWithForm(handleSubmitProfileChanges,"#popup__change-profile");
+
+// Добавление слушателей событий карточек
 
 popupPlace.setEventListeners();
 
