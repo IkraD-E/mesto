@@ -1,3 +1,5 @@
+import '../pages/index.css'
+
 import Card from "./Card.js";
 
 import FormValidator from "./FormValidator.js";
@@ -11,8 +13,6 @@ import {PopupWithImage} from "./PopupWithImage.js";
 import { PopupWithForm } from "./PopupWithForm.js";
 
 import { UserInfo } from "./UserInfo.js";
-
-const userInfo = new UserInfo('.profile__header', '.profile__text');
 
 const popupAddPlace = document.querySelector("#popup__add-place");
 
@@ -30,10 +30,6 @@ const profileAdd = document.querySelector(".profile__add-button");
 
 const profileEditButton = document.querySelector(".profile__edit-button");
 
-const nameProfile = document.querySelector(".profile__header");
-
-const infoProfile = document.querySelector(".profile__text");
-
 const formValidators = {};
 
 const validationList = {
@@ -45,13 +41,7 @@ const validationList = {
     errorClass: 'popup__error_visible'
 }
 
-const popupWithImage = new PopupWithImage(".popup_type_image");
-
-popupWithImage.setEventListeners();
-
-function handleCardClick(name, link) {
-    popupWithImage.open(name, link);
-}
+const userInfo = new UserInfo('.profile__header', '.profile__text');
 
 const handleSubmitProfileChanges = (event) => {
     event.preventDefault();
@@ -129,3 +119,13 @@ const popupProfile = new PopupWithForm(handleSubmitProfileChanges,"#popup__chang
 popupPlace.setEventListeners();
 
 popupProfile.setEventListeners();
+
+//Логика работы попапов с картинками
+
+const popupWithImage = new PopupWithImage(".popup_type_image");
+
+popupWithImage.setEventListeners();
+
+function handleCardClick(name, link) {
+    popupWithImage.open(name, link);
+}
