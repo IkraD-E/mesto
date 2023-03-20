@@ -34,12 +34,13 @@ export default class Card {
         return delBtn;
     }
     
-    _handleTuggleLikeBtn(evt) {
-        evt.target.classList.toggle("element__like-btn_active");
+    _handleTuggleLikeBtn() {
+        this._likeBtn.classList.toggle("element__like-btn_active");
     }
 
-    _handleDeletePlace(evt) {
-        evt.target.closest(".element").remove();
+    _handleDeletePlace() {
+        this._element.remove();
+        this._element = null;
     }
 
     _setEventListeners() {
@@ -47,9 +48,9 @@ export default class Card {
             this._handleCardClick(this._placeName, this._placeImage)
         });
 
-        this._likeBtn.addEventListener("click", this._handleTuggleLikeBtn);
+        this._likeBtn.addEventListener("click", () => this._handleTuggleLikeBtn());
 
-        this._delBtn.addEventListener("click", this._handleDeletePlace);
+        this._delBtn.addEventListener("click", () => this._handleDeletePlace());
     }
 
     generateCard() {

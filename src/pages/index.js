@@ -1,33 +1,31 @@
-import '../pages/index.css'
+import './index.css'
 
-import Card from "./Card.js";
+import Card from "../script/components/Card.js";
 
-import FormValidator from "./FormValidator.js";
+import FormValidator from "../script/components/FormValidator.js";
 
-import { initialCards } from "./cards.js";
+import { initialCards } from "../script/cards.js";
 
-import { Section } from "./Section.js";
+import { Section } from "../script/components/Section.js";
 
-import {PopupWithImage} from "./PopupWithImage.js";
+import {PopupWithImage} from "../script/components/PopupWithImage.js";
 
-import { PopupWithForm } from "./PopupWithForm.js";
+import { PopupWithForm } from "../script/components/PopupWithForm.js";
 
-import { UserInfo } from "./UserInfo.js";
+import { UserInfo } from "../script/components/UserInfo.js";
 
 import { 
     nameInput,
     infoInput,
-    placeNameInput,
-    imageSourceInput,
     profileAdd,
     profileEditButton,
     formValidators,
-    validationList 
-} from './utils/constants.js';
+    validationList,
+    addButton
+} from '../script/utils/constants.js';
 
-const handleSubmitProfileChanges = (event) => {
-    event.preventDefault();
-    userInfo.setNewUserInfo(nameInput.value, infoInput.value);
+const handleSubmitProfileChanges = () => {
+    userInfo.setNewUserInfo(popupProfile.returnInputValues());
     popupProfile.close();
 
     profileEditButton.focus()
@@ -46,8 +44,8 @@ const userInfo = new UserInfo('.profile__header', '.profile__text');
 
 profileEditButton.addEventListener("click",  () => {
     popupProfile.open();
-    formValidators['profile-form'].resetValidation();
     setInputProfileInfo(userInfo.getUserInfo());
+    formValidators['profile-form'].resetValidation();
 });
 
 profileAdd.addEventListener("click",  () => {
@@ -73,31 +71,31 @@ enableValidation(validationList);
 
 // Создание стандартного набора карточек
 
-const CardList = new Section({ items:initialCards, 
-        renderer: (element) => {
-            const card = new Card(element, '#element-template', handleCardClick);
+function createCard(element) {
+    const card = new Card(element, '#element-template', handleCardClick);
 
-            const cardElement = card.generateCard();
+    const cardElement = card.generateCard();
 
-            return cardElement;
-        }
-    }, '.elements__list');
+    return cardElement;
 
-CardList.createCard();
+}
+
+const cardList = new Section({ items:initialCards, 
+        renderer: createCard
+    }, 
+    '.elements__list');
+
+cardList.createCard();
 
 // Логика добавления карточек новых мест
 
-const addNewPlace = (event) => {
-    event.preventDefault();
-    const element = {
-        name: placeNameInput.value,
-        link: imageSourceInput.value
-    }
+const addNewPlace = () => {
+    const element = popupPlace.returnInputValues();
     
-    CardList.addItem(element);
+    cardList.addItem(element);
     popupPlace.close();
 
-    document.querySelector(".profile__add-button").focus()
+    addButton.focus()
 }
 
 const popupPlace = new PopupWithForm(addNewPlace,"#popup__add-place");

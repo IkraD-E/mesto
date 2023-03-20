@@ -9,8 +9,6 @@ export default class FormValidator {
     }
 
     resetValidation() {
-        this._popupForm.reset();
-
         this._toggleButtonState();
 
         this._inputList.forEach((inputElement) => {
@@ -68,8 +66,6 @@ export default class FormValidator {
     }
 
     enableValidation() {
-        this._popupForm.addEventListener('submit', evt => evt.preventDefault());
-
         this._setEventListeners();
     }
 }
