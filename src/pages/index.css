@@ -84,6 +84,10 @@
 
 @import url(../blocks/element/__delete_btn/element_delete_button.css);
 
+@import url(../blocks/button-container/__count/button-container__count.css);
+
+@import url(../blocks/button-container/button-container.css);
+
 /* Footer */
 
 @import url(../blocks/footer/footer.css);

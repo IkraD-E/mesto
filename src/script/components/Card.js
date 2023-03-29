@@ -1,7 +1,8 @@
 export default class Card {
-    constructor({name, link}, templateSelector, handleCardClick) {
+    constructor({name, link, likes}, templateSelector, handleCardClick) {
         this._placeName = name;
         this._placeImage = link;
+        this._likes = likes;
         this._templateSelector = templateSelector;
         this._handleCardClick = handleCardClick;
     }
@@ -34,6 +35,12 @@ export default class Card {
         return delBtn;
     }
     
+    _getLikeCount() {
+        const likeCount = this._element.querySelector('.button-container__count');
+
+        return likeCount;
+    }
+
     _handleTuggleLikeBtn() {
         this._likeBtn.classList.toggle("element__like-btn_active");
     }
@@ -58,10 +65,12 @@ export default class Card {
         this._elementPhoto = this._getElementPhoto();
         this._likeBtn = this._getLikeBtn();
         this._delBtn = this._getDelBtn(); 
+        this._likeCount = this._getLikeCount();
 
         this._elementPhoto.src = this._placeImage;
         this._elementPhoto.alt = this._placeName;
         this._element.querySelector(".element__title").textContent = this._placeName;
+        this._likeCount.textContent = this._likes.length;
 
         this._setEventListeners();
 

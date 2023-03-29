@@ -1,0 +1,10 @@
+.button-container__count {
+    margin: auto;
+    padding: 0;
+    color: black;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 13px;
+    text-align: center;
+}
