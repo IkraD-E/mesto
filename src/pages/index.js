@@ -6,11 +6,13 @@ import FormValidator from "../script/components/FormValidator.js";
 
 import { Section } from "../script/components/Section.js";
 
-import {PopupWithImage} from "../script/components/PopupWithImage.js";
+import { PopupWithImage } from "../script/components/PopupWithImage.js";
 
 import { PopupWithForm } from "../script/components/PopupWithForm.js";
 
 import { UserInfo } from "../script/components/UserInfo.js";
+
+import { PopupWithConfirmation } from '../script/components/PopupWithConfirmation.js';
 
 import { 
     nameInput,
@@ -22,17 +24,66 @@ import {
     addButton
 } from '../script/utils/constants.js';
 
+import { Popup } from '../script/components/Popup';
+
+const profileAvatar = document.querySelector('.profile__avatar');
+
+const profileName = document.querySelector('.profile__header');
+
+const profileInfo = document.querySelector('.profile__text');
+
+let ownerInfo = '';
+
+
+
 //Работа с сервером
 //Информация о пользователе
-function getUserInfo() {
-    return fetch('https://mesto.nomoreparties.co/v1/cohort-62/users/me ', {
+function setUserInfoFromServer() {
+    fetch('https://mesto.nomoreparties.co/v1/cohort-62/users/me ', {
         headers: {
             authorization: 'e055b3b1-f0a3-420f-954c-707ea8c5fb7b'
         }
     })
-        .then(res => res.json())
+        .then(res => {
+            if (res.ok) {
+                return res.json()
+            }
+            return Promise.reject(res.status)
+        })
+        .then(json => {
+            profileAvatar.src = json.avatar;
+            profileName.textContent = json.name;
+            profileInfo.textContent = json.about;
+
+            ownerInfo = json;
+        })
         .catch(res => console.log(`Ошибка: ${res.status}`))
 }
+
+setUserInfoFromServer()
+
+function changeUserInfo(newName, newInfo) {
+    fetch('https://mesto.nomoreparties.co/v1/cohort-62/users/me', {
+        method: 'PATCH',
+        headers: {
+            authorization: 'e055b3b1-f0a3-420f-954c-707ea8c5fb7b',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            name: newName,
+            about: newInfo
+        })
+    })
+        .then(res => {
+            if (res.ok) {
+                return res.json()
+            }
+            return Promise.reject(res.status)
+        })
+        .catch(res => console.log(`Ошибка: ${res.status}`))
+}
+
+// changeUserInfo('JoJo', 'Stardust Crusader')
 
 const handleSubmitProfileChanges = () => {
     userInfo.setNewUserInfo(popupProfile.returnInputValues());
@@ -82,7 +133,7 @@ enableValidation(validationList);
 // Создание класса для добавления новых мест с  его настройкой
 
 function createCard(element) {
-    const card = new Card(element, '#element-template', handleCardClick);
+    const card = new Card(element, '#element-template', handleCardClick, handleDeleteClick, ownerInfo);
 
     const cardElement = card.generateCard();
 
@@ -110,6 +161,7 @@ function createCardFromServer() {
             return Promise.reject(res.status)
         })
         .then(cards => {
+            console.log(cards);
             cardList.createCardList(cards);
         })
         .catch(err => console.log(`Ошибка: ${err}`))
@@ -138,11 +190,14 @@ function addNewPlaceToSerwer(placeName, placeLink) {
             }
             return Promise.reject(res.status)
         })
+        .then(json => console.log(json))
         .catch(err => console.log(`Ошибка: ${err}`))
 }
 
 const addNewPlace = () => {
     const element = popupPlace.returnInputValues();
+
+    element.owner = ownerInfo;
 
     addNewPlaceToSerwer(element.name, element.link)
     
@@ -152,17 +207,45 @@ const addNewPlace = () => {
     addButton.focus()
 }
 
+//Удаление места
+
+function handleDeleteClick(cardId, element) {
+    popupDelete.open();
+    popupDelete.writeElementData(cardId, element);
+}
+
+function handleDeletePlace(cardId, element) {
+    console.log('Сейчас мы будем удалять карточку');
+    element.remove();
+    deleteCardFromServer(cardId);
+    popupDelete.close();
+}
+
+function deleteCardFromServer(cardId) {
+    fetch(`https://mesto.nomoreparties.co/v1/cohort-62/cards/${cardId}`, {
+        method: 'DELETE',
+        headers: {
+            'authorization': 'e055b3b1-f0a3-420f-954c-707ea8c5fb7b',
+        }
+    })
+}
+
 //Включаем Попапы добавления нового места и изменения профиля
 
 const popupPlace = new PopupWithForm(addNewPlace,"#popup__add-place");
 
 const popupProfile = new PopupWithForm(handleSubmitProfileChanges,"#popup__change-profile");
 
+const popupDelete = new PopupWithConfirmation(handleDeletePlace, "#popup__delete-image");
+
+
 // Добавление слушателей событий карточек
 
 popupPlace.setEventListeners();
 
 popupProfile.setEventListeners();
+
+popupDelete.setEventListeners();
 
 //Логика работы попапов с картинками
 

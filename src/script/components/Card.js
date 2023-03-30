@@ -1,10 +1,14 @@
 export default class Card {
-    constructor({name, link, likes}, templateSelector, handleCardClick) {
+    constructor({name, link, likes = [], _id, owner}, templateSelector, handleCardClick, handleDeleteClick, thisUserId) {
         this._placeName = name;
         this._placeImage = link;
         this._likes = likes;
         this._templateSelector = templateSelector;
         this._handleCardClick = handleCardClick;
+        this._handleDeleteClick = handleDeleteClick;
+        this._cardId = _id;
+        this._userId = owner._id;
+        this._thisUserId = thisUserId._id;
     }
 
     _getTemplate() {
@@ -13,7 +17,7 @@ export default class Card {
           .content
           .querySelector('.element')
           .cloneNode(true);
-    
+
         return cardElement;
       }
 
@@ -46,8 +50,10 @@ export default class Card {
     }
 
     _handleDeletePlace() {
-        this._element.remove();
-        this._element = null;
+        console.log(`Я есть - `);
+        console.log(this._element);
+        // this._element.remove();
+        // this._element = null;
     }
 
     _setEventListeners() {
@@ -57,7 +63,7 @@ export default class Card {
 
         this._likeBtn.addEventListener("click", () => this._handleTuggleLikeBtn());
 
-        this._delBtn.addEventListener("click", () => this._handleDeletePlace());
+        this._delBtn.addEventListener('click', () => this._handleDeleteClick(this._cardId, this._element));
     }
 
     generateCard() {
@@ -66,6 +72,10 @@ export default class Card {
         this._likeBtn = this._getLikeBtn();
         this._delBtn = this._getDelBtn(); 
         this._likeCount = this._getLikeCount();
+
+        if (!(this._userId === this._thisUserId)) {
+            this._delBtn.remove();
+        }
 
         this._elementPhoto.src = this._placeImage;
         this._elementPhoto.alt = this._placeName;
