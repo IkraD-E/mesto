@@ -22,3 +22,10 @@ export const validationList = {
     inputErrorClass: 'popup__input_type_error',
     errorClass: 'popup__error_visible'
 }
+
+export const profileAvatar = document.querySelector('.profile__avatar');
+
+export const profileName = document.querySelector('.profile__header');
+
+export const profileInfo = document.querySelector('.profile__text');
+
