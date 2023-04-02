@@ -80,7 +80,33 @@ enableValidation(validationList);
 // Создание класса для добавления новых мест с  его настройкой
 
 function createCard(element) {
-    const card = new Card(element, '#element-template', handleCardClick, handleDeleteClick, userId, handleAddLike);
+    const card = new Card(element, '#element-template', user, {
+        handleCardClick: handleCardClick,
+        handleDeleteClick: handleDeleteClick,
+        handleAddLike: cardId => {
+            api.handleAddLike(cardId)
+                .then(res => {
+                    console.log("Получаем массив с сервера");
+                    console.log(res);
+                    card.setLikeCount(res)
+                })
+                .catch(err => console.log(`Ошибка добавления лайка ${err}`))},
+
+        handleDeleteLike: cardId => {
+            api.handleDeleteLike(cardId)
+                .then(res => {
+                    console.log("Получаем массив с сервера");
+                    console.log(res);
+                    card.setLikeCount(res)
+                })
+
+                //
+                //Он только добавляет, метод Found не работает так как не обновляется информация о карточке
+                //Информацию о карточке надо брать с СЕРВЕРА!!!""
+                //
+                .catch(err => console.log(`Ошибка удаления лайка ${err}`))},
+
+    });
 
     const cardElement = card.generateCard();
 
@@ -88,7 +114,7 @@ function createCard(element) {
 
 }
 
-export const cardList = new Section({ items: null, 
+const cardList = new Section({ items: null, 
     renderer: createCard
 }, 
 '.elements__list');
@@ -152,43 +178,17 @@ function handleCardClick(name, link) {
 //Информация о пользователе
 //Создаём карточки из информации с сервера
 
-
-function handleAddLike(cardId) {
-    console.log(cardId);
-    fetch(`https://mesto.nomoreparties.co/v1/cohort-62/cards/${cardId}/likes`, {
-        headers: {
-            authorization: 'e055b3b1-f0a3-420f-954c-707ea8c5fb7b',
-            'Content-Type': 'application/json; charset=UTF-8'
-        },
-        method: 'PUT',
-
-    })
-        .then(res => {
-            if (res.ok) {
-                return res.json()
-            }
-            return Promise.reject(res.status)
-        })
-        .then(json => {
-            console.log((json));
-        })
-        .catch(res => console.log(`Ошибка: ${res.status}`))
-}
-
 //Рботаем с сервером через класс
 
 let user = '';
 
-let userId = '';
-
 Promise.all([api.getUserDataFromServer(), api.getCardFromServer()])
     .then(([userData, cards]) => {
         user = userData;
-        userId = userData._id;
         userInfo.setNewUserInfo({initial: userData.name, description: userData.about});
         cardList.createCardList(cards);
 })
     .catch(res => console.log(`Ошибка: ${res.status}`))
 
 // Для проверки работоспособности
-document.querySelector('.profile__avatar').addEventListener('click', () => {console.log(pageOwner)})
+document.querySelector('.profile__avatar').addEventListener('click', () => {console.log(user)})

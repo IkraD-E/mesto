@@ -84,4 +84,28 @@ export class Api{
         })
             .then(res => this._serverResponse(res))
     }
+
+    handleAddLike(cardId) {
+        return fetch(`https://mesto.nomoreparties.co/v1/cohort-62/cards/${cardId}/likes`, {
+            headers: {
+                authorization: 'e055b3b1-f0a3-420f-954c-707ea8c5fb7b',
+                'Content-Type': 'application/json; charset=UTF-8'
+            },
+            method: 'PUT',
+    
+        })
+            .then(res => this._serverResponse(res))
+    }
+
+    handleDeleteLike(cardId) {
+        return fetch(`https://mesto.nomoreparties.co/v1/cohort-62/cards/${cardId}/likes`, {
+            headers: {
+                authorization: 'e055b3b1-f0a3-420f-954c-707ea8c5fb7b',
+                'Content-Type': 'application/json; charset=UTF-8'
+            },
+            method: 'DELETE',
+    
+        })
+        .then(res => this._serverResponse(res))
+    }
 }
