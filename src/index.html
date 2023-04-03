@@ -15,7 +15,10 @@
 
         <main class="content">
             <section class="profile">
-                <img class="profile__avatar" src="<%=require('./images/profile__avatar.jpg')%>" alt="Фото Жак-Ив Кусто">
+                <div class="profile__avatar-wrap">
+                    <img class="profile__avatar" src="" alt="аватар">
+                    <button class="profile__edit-button-avatar" type="button"></button>
+                </div>
                 <div class="profile__info">
                     <h1 class="profile__header"></h1>
                     <button class="profile__edit-button" type="button"></button>
@@ -83,6 +86,20 @@
             <form class="popup__form" name="delete-image" novalidate>
                 <button class="popup__button" type="submit">
                     Да
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="popup popup_type_change-avatar" id="popup__change-avatar">
+        <div class="popup__container">
+            <button class="popup__close-btn" type="button"></button>
+            <h2 class="popup__header">Обновить аватар</h2>
+            <form class="popup__form" name="change-avatar-form" novalidate>
+                <input required type="url" name="link" id="place-source" placeholder="Ссылка на картинку" class="popup__input popup__input_type_image-source popup__input">
+                <span class="popup__error place-source-error"></span>
+                <button class="popup__button" type="submit">
+                    Сохранить
                 </button>
             </form>
         </div>

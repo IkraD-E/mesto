@@ -29,3 +29,5 @@ export const profileName = document.querySelector('.profile__header');
 
 export const profileInfo = document.querySelector('.profile__text');
 
+export const profileAvatarWrap = document.querySelector('.profile__avatar-wrap');
+

@@ -14,6 +14,8 @@ import { UserInfo } from "../script/components/UserInfo.js";
 
 import { PopupWithConfirmation } from '../script/components/PopupWithConfirmation.js';
 
+import { PopupWithAvatar } from '../script/components/PopupWithAvatar.js';
+
 import { 
     nameInput,
     infoInput,
@@ -21,7 +23,8 @@ import {
     profileEditButton,
     formValidators,
     validationList,
-    addButton
+    addButton,
+    profileAvatarWrap
 } from '../script/utils/constants.js';
 
 import { Api } from '../script/components/Api.js'
@@ -29,6 +32,8 @@ import { Api } from '../script/components/Api.js'
 const api = new Api('https://mesto.nomoreparties.co/v1/cohort-62/', {headers: {
     authorization: 'e055b3b1-f0a3-420f-954c-707ea8c5fb7b'
 }})
+
+const popupChangeAvatar = new PopupWithAvatar(handleChangeAvatar, "#popup__change-avatar")
 
 const handleSubmitProfileChanges = () => {
     const thisUserInfo = popupProfile.returnInputValues();
@@ -46,7 +51,7 @@ function setInputProfileInfo({ name, info }) {
 
 // Сбор информации с сайта
 
-const userInfo = new UserInfo('.profile__header', '.profile__text');
+const userInfo = new UserInfo('.profile__header', '.profile__text', '.profile__avatar');
 
 // Логика открытия попапов с редактированием профиля и добавления мест
 
@@ -61,6 +66,11 @@ profileAdd.addEventListener("click",  () => {
     formValidators['add-place-form'].resetValidation();
 });
 
+profileAvatarWrap.addEventListener('click', () => {
+    popupChangeAvatar.open();
+    formValidators['change-avatar-form'].resetValidation();
+})
+
 // Включение валидации
 
 const enableValidation = (validationList) => {
@@ -70,7 +80,6 @@ const enableValidation = (validationList) => {
         const formName = formElement.getAttribute('name');
 
         formValidators[formName] = validator;
-
         validator.enableValidation();
     })
 }
@@ -86,25 +95,16 @@ function createCard(element) {
         handleAddLike: cardId => {
             api.handleAddLike(cardId)
                 .then(res => {
-                    console.log("Получаем массив с сервера");
-                    console.log(res);
                     card.setLikeCount(res)
                 })
-                .catch(err => console.log(`Ошибка добавления лайка ${err}`))},
+                .catch(err => console.log(`Лайк не добавлен ${err}`))},
 
         handleDeleteLike: cardId => {
             api.handleDeleteLike(cardId)
                 .then(res => {
-                    console.log("Получаем массив с сервера");
-                    console.log(res);
                     card.setLikeCount(res)
                 })
-
-                //
-                //Он только добавляет, метод Found не работает так как не обновляется информация о карточке
-                //Информацию о карточке надо брать с СЕРВЕРА!!!""
-                //
-                .catch(err => console.log(`Ошибка удаления лайка ${err}`))},
+                .catch(err => console.log(`Лайк не удалён ${err}`))},
 
     });
 
@@ -156,6 +156,19 @@ const popupProfile = new PopupWithForm(handleSubmitProfileChanges,"#popup__chang
 const popupDelete = new PopupWithConfirmation(handleDeletePlace, "#popup__delete-image");
 
 
+function handleChangePageAvatar(newAvatarLink) {
+    api.handleChangeAvatar(newAvatarLink).then((res) => userInfo.setNewUserAvatar(res.avatar));
+    
+    popupChangeAvatar.close();
+    profileAvatarWrap.focus();
+}
+
+function handleChangeAvatar() {
+    const newAvatarLink = popupChangeAvatar.returnInputValues();
+    popupChangeAvatar.writeElementData(newAvatarLink);
+    handleChangePageAvatar(newAvatarLink);
+}
+
 // Добавление слушателей событий карточек
 
 popupPlace.setEventListeners();
@@ -163,6 +176,8 @@ popupPlace.setEventListeners();
 popupProfile.setEventListeners();
 
 popupDelete.setEventListeners();
+
+popupChangeAvatar.setEventListeners();
 
 //Логика работы попапов с картинками
 
@@ -174,21 +189,13 @@ function handleCardClick(name, link) {
     popupWithImage.open(name, link);
 }
 
-//Работа с сервером
-//Информация о пользователе
-//Создаём карточки из информации с сервера
-
-//Рботаем с сервером через класс
-
 let user = '';
 
 Promise.all([api.getUserDataFromServer(), api.getCardFromServer()])
     .then(([userData, cards]) => {
         user = userData;
-        userInfo.setNewUserInfo({initial: userData.name, description: userData.about});
+        console.log(user);
+        userInfo.setNewUserInfo({initial: userData.name, description: userData.about, link: userData.avatar});
         cardList.createCardList(cards);
 })
     .catch(res => console.log(`Ошибка: ${res.status}`))
-
-// Для проверки работоспособности
-document.querySelector('.profile__avatar').addEventListener('click', () => {console.log(user)})

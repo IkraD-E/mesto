@@ -4,6 +4,7 @@
     border-radius: 50%;
     margin-right: 30px;
     object-fit: cover;
+    transition: opacity .8s ease-in-out;
 }
 
 @media screen and (max-width: 767px) {

@@ -85,8 +85,9 @@ export class Api{
             .then(res => this._serverResponse(res))
     }
 
+    //Добавить лайк на сервер
     handleAddLike(cardId) {
-        return fetch(`https://mesto.nomoreparties.co/v1/cohort-62/cards/${cardId}/likes`, {
+        return fetch(`${this._link}cards/${cardId}/likes`, {
             headers: {
                 authorization: 'e055b3b1-f0a3-420f-954c-707ea8c5fb7b',
                 'Content-Type': 'application/json; charset=UTF-8'
@@ -97,8 +98,9 @@ export class Api{
             .then(res => this._serverResponse(res))
     }
 
+    //Убрать лайк с сервера
     handleDeleteLike(cardId) {
-        return fetch(`https://mesto.nomoreparties.co/v1/cohort-62/cards/${cardId}/likes`, {
+        return fetch(`${this._link}cards/${cardId}/likes`, {
             headers: {
                 authorization: 'e055b3b1-f0a3-420f-954c-707ea8c5fb7b',
                 'Content-Type': 'application/json; charset=UTF-8'
@@ -107,5 +109,19 @@ export class Api{
     
         })
         .then(res => this._serverResponse(res))
+    }
+
+    handleChangeAvatar(newAvatarLink) {
+        return fetch(`https://mesto.nomoreparties.co/v1/cohort-62/users/me/avatar`, {
+            method: 'PATCH',
+            headers: {
+                authorization: 'e055b3b1-f0a3-420f-954c-707ea8c5fb7b',
+                'Content-Type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify({
+                avatar: newAvatarLink
+            })
+        })
+            .then(res => this._serverResponse(res))
     }
 }

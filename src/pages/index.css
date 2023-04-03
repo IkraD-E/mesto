@@ -64,6 +64,10 @@
 
 @import url(../blocks/profile/__add-button/profile__add-button.css);
 
+@import url(../blocks/profile/__edit-button-avatar/__edit-button-avatar.css);
+
+@import url(../blocks/profile/__avatar-wrap/profile__avatar-wrap.css);
+
 /* Elements */
 
 @import url(../blocks/elements/elements.css);
