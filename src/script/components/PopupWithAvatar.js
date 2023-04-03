@@ -6,7 +6,7 @@ export class PopupWithAvatar extends Popup{
         this._submitEvent = submitEvent;
         this._popupForm = this._popup.querySelector('.popup__form');
         this._input = this._popupForm.querySelector('.popup__input');
-
+        this._submitButton = this._popup.querySelector('.popup__button');
     }
     
     returnInputValues() {
@@ -21,6 +21,14 @@ export class PopupWithAvatar extends Popup{
 
     writeElementData(cardLink) {
         this._cardLink = cardLink;
+    }
+
+    renderLoading(isLoading) {
+        if (isLoading) {
+            this._submitButton.textContent = "Сохранение...";
+        } else {
+            this._submitButton.textContent = "Сохранить";
+        }
     }
 
     setEventListeners() {

@@ -5,12 +5,20 @@ export class PopupWithConfirmation extends Popup{
         super(popupSelector);
         this._submitEvent = submitEvent;
         this._popupForm = this._popup.querySelector('.popup__form');
-
+        this._submitButton = this._popup.querySelector('.popup__button');
     }
 
     writeElementData(cardId, element) {
         this._cardId = cardId;
         this._element = element;
+    }
+
+    renderLoading(isLoading) {
+        if (isLoading) {
+            this._submitButton.textContent = "Сохранение...";
+        } else {
+            this._submitButton.textContent = "Сохранить";
+        }
     }
 
     setEventListeners() {

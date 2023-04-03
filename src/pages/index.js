@@ -37,17 +37,47 @@ const popupChangeAvatar = new PopupWithAvatar(handleChangeAvatar, "#popup__chang
 
 const handleSubmitProfileChanges = () => {
     const thisUserInfo = popupProfile.returnInputValues();
-    api.changeServerUserInfo(thisUserInfo);
-    userInfo.setNewUserInfo(thisUserInfo);
-    popupProfile.close();
-
-    profileEditButton.focus()
+    popupProfile.renderLoading(true);
+    api.changeServerUserInfo(thisUserInfo)
+        .then((res) => {
+            userInfo.setNewUserInfo({
+                initial: res.name, 
+                description: res.about
+            });
+        })
+        .finally(() => {
+            popupProfile.renderLoading(false);
+            popupProfile.close();
+            profileEditButton.focus();
+        });
 }
 
 function setInputProfileInfo({ name, info }) {
     nameInput.value = name; 
     infoInput.value = info;
 }
+
+// Изменение аватара
+
+function handleChangePageAvatar(newAvatarLink) {
+    popupChangeAvatar.renderLoading(true);
+    api.handleChangeAvatar(newAvatarLink)
+        .then((res) => {
+            userInfo.setNewUserAvatar(res.avatar);
+        })
+        .finally(() => {
+            popupChangeAvatar.renderLoading(false);
+            popupChangeAvatar.close();
+            profileAvatarWrap.focus();
+        });
+    
+}
+
+function handleChangeAvatar() {
+    const newAvatarLink = popupChangeAvatar.returnInputValues();
+    handleChangePageAvatar(newAvatarLink);
+}
+
 
 // Сбор информации с сайта
 
@@ -123,15 +153,16 @@ const cardList = new Section({ items: null,
 
 const addNewPlace = () => {
     const element = popupPlace.returnInputValues();
-
-    element.owner = user;
-
+    popupPlace.renderLoading(true);
     api.addNewPlaceToServer(element.name, element.link)
-    
-    cardList.addItem(element, true);
-    popupPlace.close();
-
-    addButton.focus()
+        .then((res) => {
+            cardList.addItem(res, true);
+        })
+        .finally(() => {
+            popupPlace.renderLoading(false);
+            popupPlace.close();
+            addButton.focus();
+        });
 }
 
 //Удаление места
@@ -154,20 +185,6 @@ const popupPlace = new PopupWithForm(addNewPlace,"#popup__add-place");
 const popupProfile = new PopupWithForm(handleSubmitProfileChanges,"#popup__change-profile");
 
 const popupDelete = new PopupWithConfirmation(handleDeletePlace, "#popup__delete-image");
-
-
-function handleChangePageAvatar(newAvatarLink) {
-    api.handleChangeAvatar(newAvatarLink).then((res) => userInfo.setNewUserAvatar(res.avatar));
-    
-    popupChangeAvatar.close();
-    profileAvatarWrap.focus();
-}
-
-function handleChangeAvatar() {
-    const newAvatarLink = popupChangeAvatar.returnInputValues();
-    popupChangeAvatar.writeElementData(newAvatarLink);
-    handleChangePageAvatar(newAvatarLink);
-}
 
 // Добавление слушателей событий карточек
 
@@ -194,8 +211,10 @@ let user = '';
 Promise.all([api.getUserDataFromServer(), api.getCardFromServer()])
     .then(([userData, cards]) => {
         user = userData;
-        console.log(user);
-        userInfo.setNewUserInfo({initial: userData.name, description: userData.about, link: userData.avatar});
+        userInfo.setNewUserInfo({initial: userData.name, description: userData.about});
+        userInfo.setNewUserAvatar(user.avatar)
         cardList.createCardList(cards);
 })
-    .catch(res => console.log(`Ошибка: ${res.status}`))
+    .catch(res => console.log(`Ошибка: ${res.status}`));
+
+// Логика ожидания

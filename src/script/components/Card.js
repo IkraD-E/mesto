@@ -50,7 +50,7 @@ export class Card {
     }
 
     setLikeCount(cardInfo) {
-        this._likeList = cardInfo.likes;
+        this._likeList = cardInfo.likes || [];
         
         this._likeCount.textContent = this._likeList.length;
 
@@ -62,7 +62,6 @@ export class Card {
         });
 
         this._likeBtn.addEventListener("click", () => {
-            console.log(this._checkUserLike());
             if (this._checkUserLike()) {
                 this._handleDeleteLike(this._cardId);
                 this._handleTuggleLikeBtn();
