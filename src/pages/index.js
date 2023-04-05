@@ -35,45 +35,31 @@ const apiParams = {
 
 const api = new Api(apiParams)
 
-const popupChangeAvatar = new PopupWithForm(handleChangeAvatar, "#popup__change-avatar")
-
-const handleSubmitProfileChanges = () => {
-    const thisUserInfo = popupProfile.returnInputValues();
-    popupProfile.renderLoading(true);
-    api.changeServerUserInfo(thisUserInfo)
+function handleSubmitProfileChanges() {
+    return api.changeServerUserInfo(popupProfile.returnInputValues())
         .then((res) => {
-            console.log(res);
             userInfo.setUserInfo({
                 name: res.name, 
                 info: res.about
             });
         })
         .then(() => {
-            popupProfile.close();
             profileEditButton.focus();
         })
         .catch((err) => {console.log(`Ошибка при изменении информации о пользователе - ${err}`)})
-        .finally(() => {
-            popupProfile.renderLoading(false);
-        });
 }
 
 // Изменение аватара
 
-function handleChangePageAvatar(newAvatarLink) {
-    popupChangeAvatar.renderLoading(true);
-    api.handleChangeAvatar(newAvatarLink)
+function handleSubmitChangePageAvatar() {
+    return api.handleChangeAvatar(popupChangeAvatar.returnInputValues().link)
         .then((res) => {
             userInfo.setNewUserAvatar(res.avatar);
         })
         .then(() => {
-            popupChangeAvatar.close();
             profileAvatarWrap.focus();
         })
         .catch((err) => {console.log(`Ошибка при изменении аватара пользователя - ${err}`)})
-        .finally(() => {
-            popupChangeAvatar.renderLoading(false);
-        });
     
 }
 
@@ -157,21 +143,16 @@ const cardList = new Section({ items: null,
 
 // Логика добавления карточек новых мест
 
-const addNewPlace = () => {
+const handleSubmitAddNewPlace = () => {
     const element = popupPlace.returnInputValues();
-    popupPlace.renderLoading(true);
-    api.addNewPlaceToServer(element.name, element.link)
+    return api.addNewPlaceToServer(element.name, element.link)
         .then((res) => {
             cardList.addItem(res, true);
         })
         .then(() => {
-            popupPlace.close();
             addButton.focus();
         })
         .catch((err) => {console.log(`Ошибка при добавлении нового места - ${err}`)})
-        .finally(() => {
-            popupPlace.renderLoading(false);
-        });
 }
 
 //Удаление места
@@ -181,19 +162,24 @@ function handleDeleteClick(cardId, element) {
     popupDelete.writeElementData(cardId, element);
 }
 
-function handleDeletePlace(cardId, element) {
-    element.remove();
-    api.deleteCardFromServer(cardId);
-    popupDelete.close();
+function handleSubmitDeletePlace(cardId, element) {
+    api.deleteCardFromServer(cardId)
+        .then(() => {
+            element.remove();
+            popupDelete.close();
+        })
+        .catch((err) => {console.log(`Ошибка при удалении места - ${err}`)})
 }
 
 //Включаем Попапы добавления нового места и изменения профиля
 
-const popupPlace = new PopupWithForm(addNewPlace,"#popup__add-place");
+const popupPlace = new PopupWithForm(handleSubmitAddNewPlace,"#popup__add-place");
 
 const popupProfile = new PopupWithForm(handleSubmitProfileChanges,"#popup__change-profile");
 
-const popupDelete = new PopupWithConfirmation(handleDeletePlace, "#popup__delete-image");
+const popupChangeAvatar = new PopupWithForm(handleSubmitChangePageAvatar, "#popup__change-avatar")
+
+const popupDelete = new PopupWithConfirmation(handleSubmitDeletePlace, "#popup__delete-image");
 
 // Добавление слушателей событий карточек
 

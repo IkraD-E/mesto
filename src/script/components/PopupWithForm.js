@@ -23,7 +23,6 @@ export class PopupWithForm extends Popup{
     }
 
     setInputsValues(data) {
-        console.log(data);
         this._inputs.forEach((input) => {
             input.value = data[input.name]
         })
@@ -31,11 +30,11 @@ export class PopupWithForm extends Popup{
 
     close() {
         this._popupForm.reset();
-        super.close();
 
+        super.close();
     }
     
-    renderLoading(isLoading) {
+    _renderLoading(isLoading) {
         if (isLoading) {
             this._submitButton.textContent = "Сохранение...";
         } else {
@@ -44,11 +43,14 @@ export class PopupWithForm extends Popup{
     }
 
     setEventListeners() {
+        super.setEventListeners();
+
         this._popupForm.addEventListener('submit', (evt) => {
             evt.preventDefault();
-            this._submitEvent();
+            this._renderLoading(true)
+            this._submitEvent()
+                .then(() => this.close())
+                .finally(() => this._renderLoading(true));
         });
-
-        super.setEventListeners()
     }
 }

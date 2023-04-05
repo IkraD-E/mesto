@@ -52,7 +52,6 @@ export class Api{
 
     //Изменить данные о пользователе на сервере
     changeServerUserInfo(data) {
-        console.log(data.name);
         return fetch(`${this._link}users/me`, {
             method: 'PATCH',
             body: JSON.stringify({
