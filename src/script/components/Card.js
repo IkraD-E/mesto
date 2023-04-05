@@ -39,7 +39,7 @@ export class Card {
         return this._element.querySelector('.button-container__count');
     }
 
-    _handleTuggleLikeBtn() {
+    handleTuggleLikeBtn() {
         this._likeBtn.classList.toggle("element__like-btn_active");
     }
 
@@ -53,7 +53,6 @@ export class Card {
         this._likeList = cardInfo.likes || [];
         
         this._likeCount.textContent = this._likeList.length;
-
     }
 
     _setEventListeners() {
@@ -64,10 +63,8 @@ export class Card {
         this._likeBtn.addEventListener("click", () => {
             if (this._checkUserLike()) {
                 this._handleDeleteLike(this._cardId);
-                this._handleTuggleLikeBtn();
             } else {
                 this._handleAddLike(this._cardId);
-                this._handleTuggleLikeBtn();
             }
         });
 
@@ -93,7 +90,7 @@ export class Card {
         this._element.querySelector(".element__title").textContent = this._placeName;
 
         if (this._checkUserLike()) {
-            this._handleTuggleLikeBtn();
+            this.handleTuggleLikeBtn();
         }
 
         this._setEventListeners();

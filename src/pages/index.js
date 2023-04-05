@@ -14,11 +14,7 @@ import { UserInfo } from "../script/components/UserInfo.js";
 
 import { PopupWithConfirmation } from '../script/components/PopupWithConfirmation.js';
 
-import { PopupWithAvatar } from '../script/components/PopupWithAvatar.js';
-
-import { 
-    nameInput,
-    infoInput,
+import {
     profileAdd,
     profileEditButton,
     formValidators,
@@ -29,32 +25,37 @@ import {
 
 import { Api } from '../script/components/Api.js'
 
-const api = new Api('https://mesto.nomoreparties.co/v1/cohort-62/', {headers: {
-    authorization: 'e055b3b1-f0a3-420f-954c-707ea8c5fb7b'
-}})
+const apiParams = {
+    link: 'https://mesto.nomoreparties.co/v1/cohort-62/',
+    headers: {
+        authorization: 'e055b3b1-f0a3-420f-954c-707ea8c5fb7b',
+        'Content-Type': 'application/json'
+    }
+}
 
-const popupChangeAvatar = new PopupWithAvatar(handleChangeAvatar, "#popup__change-avatar")
+const api = new Api(apiParams)
+
+const popupChangeAvatar = new PopupWithForm(handleChangeAvatar, "#popup__change-avatar")
 
 const handleSubmitProfileChanges = () => {
     const thisUserInfo = popupProfile.returnInputValues();
     popupProfile.renderLoading(true);
     api.changeServerUserInfo(thisUserInfo)
         .then((res) => {
-            userInfo.setNewUserInfo({
-                initial: res.name, 
-                description: res.about
+            console.log(res);
+            userInfo.setUserInfo({
+                name: res.name, 
+                info: res.about
             });
         })
-        .finally(() => {
-            popupProfile.renderLoading(false);
+        .then(() => {
             popupProfile.close();
             profileEditButton.focus();
+        })
+        .catch((err) => {console.log(`Ошибка при изменении информации о пользователе - ${err}`)})
+        .finally(() => {
+            popupProfile.renderLoading(false);
         });
-}
-
-function setInputProfileInfo({ name, info }) {
-    nameInput.value = name; 
-    infoInput.value = info;
 }
 
 // Изменение аватара
@@ -65,16 +66,19 @@ function handleChangePageAvatar(newAvatarLink) {
         .then((res) => {
             userInfo.setNewUserAvatar(res.avatar);
         })
-        .finally(() => {
-            popupChangeAvatar.renderLoading(false);
+        .then(() => {
             popupChangeAvatar.close();
             profileAvatarWrap.focus();
+        })
+        .catch((err) => {console.log(`Ошибка при изменении аватара пользователя - ${err}`)})
+        .finally(() => {
+            popupChangeAvatar.renderLoading(false);
         });
     
 }
 
 function handleChangeAvatar() {
-    const newAvatarLink = popupChangeAvatar.returnInputValues();
+    const newAvatarLink = popupChangeAvatar.returnInputValues().link;
     handleChangePageAvatar(newAvatarLink);
 }
 
@@ -87,7 +91,7 @@ const userInfo = new UserInfo('.profile__header', '.profile__text', '.profile__a
 
 profileEditButton.addEventListener("click",  () => {
     popupProfile.open();
-    setInputProfileInfo(userInfo.getUserInfo());
+    popupProfile.setInputsValues(userInfo.getUserInfo());
     formValidators['profile-form'].resetValidation();
 });
 
@@ -125,14 +129,16 @@ function createCard(element) {
         handleAddLike: cardId => {
             api.handleAddLike(cardId)
                 .then(res => {
-                    card.setLikeCount(res)
+                    card.setLikeCount(res);
+                    card.handleTuggleLikeBtn();
                 })
                 .catch(err => console.log(`Лайк не добавлен ${err}`))},
 
         handleDeleteLike: cardId => {
             api.handleDeleteLike(cardId)
                 .then(res => {
-                    card.setLikeCount(res)
+                    card.setLikeCount(res);
+                    card.handleTuggleLikeBtn();
                 })
                 .catch(err => console.log(`Лайк не удалён ${err}`))},
 
@@ -158,10 +164,13 @@ const addNewPlace = () => {
         .then((res) => {
             cardList.addItem(res, true);
         })
-        .finally(() => {
-            popupPlace.renderLoading(false);
+        .then(() => {
             popupPlace.close();
             addButton.focus();
+        })
+        .catch((err) => {console.log(`Ошибка при добавлении нового места - ${err}`)})
+        .finally(() => {
+            popupPlace.renderLoading(false);
         });
 }
 
@@ -211,8 +220,8 @@ let user = '';
 Promise.all([api.getUserDataFromServer(), api.getCardFromServer()])
     .then(([userData, cards]) => {
         user = userData;
-        userInfo.setNewUserInfo({initial: userData.name, description: userData.about});
-        userInfo.setNewUserAvatar(user.avatar)
+        userInfo.setUserInfo({name: userData.name, info: userData.about});
+        userInfo.setNewUserAvatar(user.avatar);
         cardList.createCardList(cards);
 })
     .catch(res => console.log(`Ошибка: ${res.status}`));

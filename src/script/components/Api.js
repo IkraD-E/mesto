@@ -1,15 +1,5 @@
-import {profileAvatar,
-        profileName,
-        profileInfo 
-} from "../utils/constants.js";
-
-import { cardList } from "../../pages/index.js";
-
-//Работа с карточкамаи
-//Добовление места на сервер
-
 export class Api{
-    constructor(link, headers){
+    constructor({link, headers}){
         this._link = link;
         this._headers = headers;
     }
@@ -25,9 +15,7 @@ export class Api{
     //Сбор информации о пользователе
     getUserDataFromServer() {
         return fetch(`${this._link}users/me`, {
-            headers: {
-                authorization: 'e055b3b1-f0a3-420f-954c-707ea8c5fb7b'
-            }
+            headers: this._headers
         })
             .then(res => this._serverResponse(res))
     }
@@ -35,9 +23,7 @@ export class Api{
     //Сбор информации о карточках
     getCardFromServer() {
         return fetch(`${this._link}cards`, {
-            headers: {
-                authorization: 'e055b3b1-f0a3-420f-954c-707ea8c5fb7b'
-            }
+            headers: this._headers
         })
             .then(res => this._serverResponse(res))
     }
@@ -50,10 +36,7 @@ export class Api{
                 name: placeName,
                 link: placeLink
             }),
-            headers: {
-                'authorization': 'e055b3b1-f0a3-420f-954c-707ea8c5fb7b',
-                'Content-Type': 'application/json; charset=UTF-8'
-            }
+            headers: this._headers
         })
             .then(res => this._serverResponse(res))
     }
@@ -62,25 +45,21 @@ export class Api{
     deleteCardFromServer(cardId) {
         return fetch(`${this._link}cards/${cardId}`, {
             method: 'DELETE',
-            headers: {
-                'authorization': 'e055b3b1-f0a3-420f-954c-707ea8c5fb7b',
-            }
+            headers: this._headers
         })
             .then(res => this._serverResponse(res))
     }
 
     //Изменить данные о пользователе на сервере
-    changeServerUserInfo({initial, description}) {
+    changeServerUserInfo(data) {
+        console.log(data.name);
         return fetch(`${this._link}users/me`, {
             method: 'PATCH',
-            headers: {
-                authorization: 'e055b3b1-f0a3-420f-954c-707ea8c5fb7b',
-                'Content-Type': 'application/json'
-            },
             body: JSON.stringify({
-                name: initial,
-                about: description
-            })
+                name: data.name,
+                about: data.info
+            }),
+            headers: this._headers
         })
             .then(res => this._serverResponse(res))
     }
@@ -88,11 +67,8 @@ export class Api{
     //Добавить лайк на сервер
     handleAddLike(cardId) {
         return fetch(`${this._link}cards/${cardId}/likes`, {
-            headers: {
-                authorization: 'e055b3b1-f0a3-420f-954c-707ea8c5fb7b',
-                'Content-Type': 'application/json; charset=UTF-8'
-            },
             method: 'PUT',
+            headers: this._headers
     
         })
             .then(res => this._serverResponse(res))
@@ -101,26 +77,20 @@ export class Api{
     //Убрать лайк с сервера
     handleDeleteLike(cardId) {
         return fetch(`${this._link}cards/${cardId}/likes`, {
-            headers: {
-                authorization: 'e055b3b1-f0a3-420f-954c-707ea8c5fb7b',
-                'Content-Type': 'application/json; charset=UTF-8'
-            },
             method: 'DELETE',
+            headers: this._headers
     
         })
         .then(res => this._serverResponse(res))
     }
 
     handleChangeAvatar(newAvatarLink) {
-        return fetch(`https://mesto.nomoreparties.co/v1/cohort-62/users/me/avatar`, {
+        return fetch(`${this._link}/users/me/avatar`, {
             method: 'PATCH',
-            headers: {
-                authorization: 'e055b3b1-f0a3-420f-954c-707ea8c5fb7b',
-                'Content-Type': 'application/json; charset=UTF-8'
-            },
             body: JSON.stringify({
                 avatar: newAvatarLink
-            })
+            }),
+            headers: this._headers
         })
             .then(res => this._serverResponse(res))
     }

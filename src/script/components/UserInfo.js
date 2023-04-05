@@ -15,9 +15,9 @@ export class UserInfo{
         return {name:this._userName, info:this._userInfo}
     }
 
-    setNewUserInfo({initial, description}) {
-        this._profileName.textContent = initial;
-        this._profileInfo.textContent = description;
+    setUserInfo(data) {
+        this._profileName.textContent = data.name;
+        this._profileInfo.textContent = data.info;
     }
 
     setNewUserAvatar(link) {
